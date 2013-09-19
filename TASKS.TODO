@@ -1,0 +1,16 @@
+Sofa Control:
+  SABnzbd:
+    API DOC: http://wiki.sabnzbd.org/api
+    API Calls:
+      ✔ Get queue @done (13-09-19 14:43)
+      ✔ Get history (start = index, limit = count) @done (13-09-19 14:43)
+      ✔ Add nzb from url @done (13-09-19 14:55)
+      ✔ Delete slot @done (13-09-19 15:04)
+      ✔ Pause downloads @done (13-09-19 15:04)
+      ✔ Resume downloads @done (13-09-19 15:04)
+      ✔ Pause a download @done (13-09-19 15:09)
+      ✔ Resume a download @done (13-09-19 15:09)
+
+  Config:
+    - To modify config.js run: git update-index --no-assume-unchanged config.js
+    - After change and commit run: git update-index --assume-unchanged config.js

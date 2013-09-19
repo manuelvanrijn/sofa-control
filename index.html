@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="msapplication-tap-highlight" content="no">
+  <title>Sofa Control</title>
+
+  <link rel="stylesheet" href="/bower_components/chocolatechip-ui/chui/chui.ios-3.0.2.css">
+  <script src="/bower_components/chocolatechip-ui/chui/chocolatechip-3.0.2.js"></script>
+  <script src="/bower_components/chocolatechip-ui/chui/chui-3.0.2.js"></script>
+
+  <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css">
+  <!--[if IE 7]>
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome-ie7.css">
+  <![endif]-->
+
+  <script src="/bower_components/angular/angular.min.js"></script>
+</head>
+<script>
+$(function() {
+  $.UISlideout();
+  $('.slide-out > section').append('\
+    <h2>Services</h2>\
+    <ul class="list">\
+      <li data-show-article="sabnzbd">\
+        <h3><i class="icon-cloud"></i> SABnzbd</h3>\
+      </li>\
+      <li data-show-article="sickbeard">\
+        <h3><i class="icon-cloud"></i> Sick Beard</h3>\
+      </li>\
+      <li data-show-article="couchpotato">\
+        <h3><i class="icon-cloud"></i> CouchPotato</h3>\
+      </li>\
+      <li data-show-article="settings">\
+        <h3><i class="icon-cogs"></i> Settings</h3>\
+      </li>\
+    </ul>');
+});
+</script>
+<body ng-app="sofaControlApp">
+  <nav>
+    <h1>SABnzbd</h1>
+  </nav>
+  <article id='sabnzbd' ng-controller="SabnzbCtrl">
+    <section>
+      <h2>sabnzbd</h2>
+    </section>
+  </article>
+
+  <nav>
+    <h1>Sick Beard</h1>
+  </nav>
+  <article id='sickbeard'>
+    <section>
+      <h2>sickbeard</h2>
+    </section>
+  </article>
+
+  <nav>
+    <h1>CouchPotato</h1>
+  </nav>
+  <article id='couchpotato'>
+    <section>
+      <h2>couchpotato</h2>
+    </section>
+  </article>
+
+  <nav>
+    <h1>Settings</h1>
+  </nav>
+  <article id='settings'>
+    <section>
+      <h2>settings</h2>
+    </section>
+  </article>
+
+  <!-- APP -->
+  <script src="/assets/javascripts/sofa-control.js"></script>
+  <!-- CONFIG -->
+  <script src="/config.js"></script>
+  <!-- DIRECTIVES -->
+  <!-- SERVICES -->
+  <script src="/assets/javascripts/services/sabnzbd.js"></script>
+  <!-- CONTROLLERS -->
+  <script src="/assets/javascripts/controllers/sabnzbd_controller.js"></script>
+</body>
+</html>
