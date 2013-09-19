@@ -26,6 +26,17 @@ Sofa Control:
       ✔ deleteShow @done (13-09-19 16:51)
       ✔ seasons @done (13-09-19 16:51)
 
+  CouchPotato:
+    API DOC: http://host:port/docs
+    API Calls:
+     ✔ available @done (13-09-19 17:27)
+     ✔ version @done (13-09-19 17:27)
+     ✔ searchWantedList @done (13-09-19 17:27)
+     ✔ search @done (13-09-19 17:27)
+     ✔ movies @done (13-09-19 17:27)
+     ✔ addMovie @done (13-09-19 17:27)
+     ✔ profiles @done (13-09-19 17:27)
+
   Config:
     - To modify config.js run: git update-index --no-assume-unchanged config.js
     - After change and commit run: git update-index --assume-unchanged config.js

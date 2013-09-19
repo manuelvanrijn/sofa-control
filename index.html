@@ -61,7 +61,7 @@ $(function() {
   <nav>
     <h1>CouchPotato</h1>
   </nav>
-  <article id='couchpotato'>
+  <article id='couchpotato' ng-controller="CouchPotatoCtrl">
     <section>
       <h2>couchpotato</h2>
     </section>
@@ -84,8 +84,10 @@ $(function() {
   <!-- SERVICES -->
   <script src="/assets/javascripts/services/sabnzbd.js"></script>
   <script src="/assets/javascripts/services/sickbeard.js"></script>
+  <script src="/assets/javascripts/services/couchpotato.js"></script>
   <!-- CONTROLLERS -->
   <script src="/assets/javascripts/controllers/sabnzbd_controller.js"></script>
   <script src="/assets/javascripts/controllers/sickbeard_controller.js"></script>
+  <script src="/assets/javascripts/controllers/couchpotato_controller.js"></script>
 </body>
 </html>
