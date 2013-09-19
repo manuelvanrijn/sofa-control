@@ -11,6 +11,21 @@ Sofa Control:
       ✔ Pause a download @done (13-09-19 15:09)
       ✔ Resume a download @done (13-09-19 15:09)
 
+  Sick Beard:
+    API DOC: http://sickbeard.com/api/
+    API Calls:
+      ✔ stats @done (13-09-19 16:51)
+      ✔ forceSearch @done (13-09-19 16:51)
+      ✔ history @done (13-09-19 16:51)
+      ✔ future @done (13-09-19 16:51)
+      ✔ shows @done (13-09-19 16:51)
+      ✔ show @done (13-09-19 16:51)
+      ✔ pauseResumeShow @done (13-09-19 16:51)
+      ✔ searchShows @done (13-09-19 16:51)
+      ✔ addShow @done (13-09-19 16:51)
+      ✔ deleteShow @done (13-09-19 16:51)
+      ✔ seasons @done (13-09-19 16:51)
+
   Config:
     - To modify config.js run: git update-index --no-assume-unchanged config.js
     - After change and commit run: git update-index --assume-unchanged config.js
