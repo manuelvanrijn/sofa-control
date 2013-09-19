@@ -10,8 +10,7 @@
     .constant('COUCHPOTATO', {
       host: 'localhost',
       port: 5050,
-      username: '',
-      password: ''
+      apiKey: ''
     })
     .constant('SICKBEARD', {
       host: 'localhost',
