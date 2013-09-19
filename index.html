@@ -37,6 +37,9 @@ $(function() {
         <h3><i class="icon-cogs"></i> Settings</h3>\
       </li>\
     </ul>');
+
+  $('.segmented').UIPanelToggle('#toggle-panels',function(){$.noop;});
+
 });
 </script>
 <body ng-app="sofaControlApp">
@@ -45,7 +48,53 @@ $(function() {
   </nav>
   <article id='sabnzbd' ng-controller="SabnzbCtrl">
     <section>
-      <h2>sabnzbd</h2>
+      <div id='segmentedPanel' class='horizontal centered'>
+        <div class='segmented'>
+          <a class='button'>Queue</a>
+          <a class='button'>Search</a>
+          <a class='button' ng-click="getHistory()">History</a>
+          <a class='button'>Stats</a>
+        </div>
+      </div>
+      <div id="toggle-panels">
+        <div>
+          <h2>Queue <small>({{queue.length}} items)</small></h2>
+          <ul class='list'>
+            <li class='comp' ng-repeat="item in queue">
+              <div>
+                <h3>{{item.filename}}</h3>
+                <h4>{{item.mbleft}} / {{item.mb}} MB</h4>
+              </div>
+              <aside>
+                <h4>{{item.timeleft}}</h4>
+                <span class='nav'></span>
+              </aside>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>Search</h2>
+
+        </div>
+        <div>
+          <h2>History</h2>
+          <ul class='list'>
+            <li class='comp' ng-repeat="item in history">
+              <div>
+                <h3>{{item.name}}</h3>
+                <h4>Finished in: {{secondsToTime(item.download_time)}}</h4>
+              </div>
+              <aside>
+                <h4>{{item.status}}</h4>
+                <span class='nav'></span>
+              </aside>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>Stats</h2>
+        </div>
+      </div>
     </section>
   </article>
 
