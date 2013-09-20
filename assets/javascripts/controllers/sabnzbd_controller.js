@@ -8,7 +8,6 @@
 
       $scope.getHistory = function() {
         SABnzbdService.history().then(function(data) {
-          console.log(data.slots[0]);
           $scope.history = data.slots;
           if(!$scope.$$phase) {
             $scope.$apply();

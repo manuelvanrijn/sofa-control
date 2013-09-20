@@ -16,84 +16,118 @@
     <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome-ie7.css">
   <![endif]-->
 
+  <script src="/bower_components/jquery/jquery.min.js"></script>
   <script src="/bower_components/angular/angular.min.js"></script>
+  <style>
+    article > section, .slide-out > section {
+      height: auto;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <script>
 $(function() {
-  $.UISlideout();
-  $('.slide-out > section').append('\
-    <h2>Services</h2>\
-    <ul class="list">\
-      <li data-show-article="sabnzbd">\
-        <h3><i class="icon-cloud"></i> SABnzbd</h3>\
-      </li>\
-      <li data-show-article="sickbeard">\
-        <h3><i class="icon-cloud"></i> Sick Beard</h3>\
-      </li>\
-      <li data-show-article="couchpotato">\
-        <h3><i class="icon-cloud"></i> CouchPotato</h3>\
-      </li>\
-      <li data-show-article="settings">\
-        <h3><i class="icon-cogs"></i> Settings</h3>\
-      </li>\
-    </ul>');
+  (function(chui) {
+    chui.UISlideout();
+    $('.slide-out > section').append('\
+      <h2>Services</h2>\
+      <ul class="list">\
+        <li data-show-article="sabnzbd">\
+          <h3><i class="icon-cloud"></i> SABnzbd</h3>\
+        </li>\
+        <li data-show-article="sickbeard">\
+          <h3><i class="icon-cloud"></i> Sick Beard</h3>\
+        </li>\
+        <li data-show-article="couchpotato">\
+          <h3><i class="icon-cloud"></i> CouchPotato</h3>\
+        </li>\
+        <li data-show-article="settings">\
+          <h3><i class="icon-cogs"></i> Settings</h3>\
+        </li>\
+      </ul>');
 
-  $('.segmented').UIPanelToggle('#toggle-panels',function(){$.noop;});
+    //$('.segmented').UIPanelToggle('#toggle-panels',function(){$.noop;});
+    if (chui.isiOS6) $('body').addClass('isiOS6');
+    $('.tabbar-panel').addClass('hidden');
+    $('.tabbar a.button').on('singletap', function(e) {
+      $('.tabbar-panel:not(".hidden")').addClass('hidden');
 
+      var id = $(this).attr('data-panel');
+      var article = $(this).attr('data-article');
+      var init = $(this).attr('data-init');
+
+      $(id).removeClass('hidden')
+      if(typeof init === "string") {
+        angular.element(document.getElementById(article)).scope()[init]()
+      }
+    });
+    $('.tabbar a.button:first').trigger('singletap');
+
+  })(window.$chocolatechip);
 });
 </script>
-<body ng-app="sofaControlApp">
+<body ng-app="sofaControlApp" class="hasTabBar">
+  <div class="tabbar" id="tabbar">
+    <a class="button" data-panel="#queue" data-article="sabnzbd">
+      <span class="icon"></span> <label>Queue</label>
+    </a>
+    <a class="button" data-panel="#search" data-article="sabnzbd">
+      <span class="icon"></span> <label>Search</label>
+    </a>
+    <a class="button" data-panel="#history" data-article="sabnzbd" data-init="getHistory">
+      <span class="icon"></span> <label>History</label>
+    </a>
+    <a class="button" data-panel="#stats" data-article="sabnzbd">
+      <span class="icon"></span> <label>Stats</label>
+    </a>
+  </div>
+
   <nav>
     <h1>SABnzbd</h1>
   </nav>
   <article id='sabnzbd' ng-controller="SabnzbCtrl">
     <section>
-      <div id='segmentedPanel' class='horizontal centered'>
-        <div class='segmented'>
-          <a class='button'>Queue</a>
-          <a class='button'>Search</a>
-          <a class='button' ng-click="getHistory()">History</a>
-          <a class='button'>Stats</a>
-        </div>
+      <div id="queue" class="tabbar-panel">
+        <h2>Queue <small>({{queue.length}} items)</small></h2>
+        <ul class='list'>
+          <li class='comp' ng-repeat="item in queue">
+            <div>
+              <h3>{{item.filename}}</h3>
+              <h4>{{item.mbleft}} / {{item.mb}} MB</h4>
+            </div>
+            <aside>
+              <h4>{{item.timeleft}}</h4>
+              <span class='nav'></span>
+            </aside>
+          </li>
+        </ul>
       </div>
-      <div id="toggle-panels">
-        <div>
-          <h2>Queue <small>({{queue.length}} items)</small></h2>
-          <ul class='list'>
-            <li class='comp' ng-repeat="item in queue">
-              <div>
-                <h3>{{item.filename}}</h3>
-                <h4>{{item.mbleft}} / {{item.mb}} MB</h4>
-              </div>
-              <aside>
-                <h4>{{item.timeleft}}</h4>
-                <span class='nav'></span>
-              </aside>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h2>Search</h2>
 
-        </div>
-        <div>
-          <h2>History</h2>
-          <ul class='list'>
-            <li class='comp' ng-repeat="item in history">
-              <div>
-                <h3>{{item.name}}</h3>
-                <h4>Finished in: {{secondsToTime(item.download_time)}}</h4>
-              </div>
-              <aside>
-                <h4>{{item.status}}</h4>
-                <span class='nav'></span>
-              </aside>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h2>Stats</h2>
-        </div>
+      <div id="search" class="tabbar-panel">
+        <h2>Search</h2>
+
+      </div>
+
+      <div id="history" class="tabbar-panel">
+        <h2>History</h2>
+        <ul class='list'>
+          <li class='comp' ng-repeat="item in history">
+            <div>
+              <h3>{{item.name}}</h3>
+              <h4>Finished in: {{secondsToTime(item.download_time)}}</h4>
+            </div>
+            <aside>
+              <h4>{{item.status}}</h4>
+              <span class='nav'></span>
+            </aside>
+          </li>
+        </ul>
+      </div>
+
+      <div id="stats" class="tabbar-panel">
+        <h2>Stats</h2>
       </div>
     </section>
   </article>

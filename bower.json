@@ -12,6 +12,7 @@
   "dependencies": {
     "chocolatechip-ui": "~3.0.2",
     "font-awesome": "~3.2.1",
-    "angular": "~1.2.0-rc.2"
+    "angular": "~1.2.0-rc.2",
+    "jquery": "~2.0.3"
   }
 }
