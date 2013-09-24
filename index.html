@@ -107,7 +107,30 @@ $(function() {
 
       <div id="search" class="tabbar-panel">
         <h2>Search</h2>
+        <form ng-submit="search(query)">
+          <ul ui-implements='form' class='list'>
+             <li class='comp' data-goto>
+              <div>
+                <label for='query'>Search query:</label>
+              </div>
+              <aside>
+                <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
+              </aside>
+             </li>
+          </ul>
+        </form>
 
+        <ul class='list'>
+          <li class='comp' ng-repeat="entry in searchResult.entries" ng-click="download(entry)">
+            <div>
+              <h3>{{entry.title}}</h3>
+              <h4>{{entry.contentSnippet}}</h4>
+            </div>
+            <aside>
+              <span class='nav'></span>
+            </aside>
+          </li>
+        </ul>
       </div>
 
       <div id="history" class="tabbar-panel">
@@ -168,6 +191,8 @@ $(function() {
   <script src="/assets/javascripts/services/sabnzbd.js"></script>
   <script src="/assets/javascripts/services/sickbeard.js"></script>
   <script src="/assets/javascripts/services/couchpotato.js"></script>
+  <!-- SERVICES: NZB Providers -->
+  <script src="/assets/javascripts/services/nzb-providers/nzbindex.js"></script>
   <!-- CONTROLLERS -->
   <script src="/assets/javascripts/controllers/sabnzbd_controller.js"></script>
   <script src="/assets/javascripts/controllers/sickbeard_controller.js"></script>
