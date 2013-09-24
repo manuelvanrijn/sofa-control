@@ -4,6 +4,8 @@ var sofaControlApp;
   'use strict';
 
   sofaControlApp = angular.module('sofaControlApp', []);
-  sofaControlApp.run();
+  sofaControlApp.run(['$rootScope', function($rootScope) {
+    $rootScope.state = null;
+  }]);
 
 }).call(this);

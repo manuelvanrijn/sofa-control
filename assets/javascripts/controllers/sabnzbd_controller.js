@@ -7,6 +7,13 @@
       $scope.history = [];
       $scope.searchResult = {};
 
+      $scope.init = function() {
+        $rootScope.state = 'sabnzbd';
+        $rootScope.$apply();
+
+        $('.tabbar:visible a.button:first').trigger('singletap');
+      };
+
       $scope.getHistory = function() {
         SABnzbdService.history().then(function(data) {
           $scope.history = data.slots;

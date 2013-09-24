@@ -33,7 +33,7 @@ $(function() {
     chui.UISlideout();
     $('.slide-out > section').append('\
       <h2>Services</h2>\
-      <ul class="list">\
+      <ul class="list mainnav">\
         <li data-show-article="sabnzbd">\
           <h3><i class="icon-cloud"></i> SABnzbd</h3>\
         </li>\
@@ -63,13 +63,17 @@ $(function() {
         angular.element(document.getElementById(article)).scope()[init]()
       }
     });
-    $('.tabbar a.button:first').trigger('singletap');
-
+    $('.mainnav li').on('singletap', function(e) {
+      var article = $(this).attr('data-show-article');
+      angular.element(document.getElementById(article)).scope().init();
+    });
+    $('.mainnav li:first').trigger('singletap');
   })(window.$chocolatechip);
 });
 </script>
 <body ng-app="sofaControlApp" class="hasTabBar">
-  <div class="tabbar" id="tabbar">
+  <!-- SABnzbd -->
+  <div class="tabbar" ng-show="state == 'sabnzbd'">
     <a class="button" data-panel="#queue" data-article="sabnzbd">
       <span class="icon"></span> <label>Queue</label>
     </a>
@@ -84,6 +88,20 @@ $(function() {
     </a>
   </div>
 
+  <!-- Sick Beard -->
+  <div class="tabbar" ng-show="state == 'sickbeard'">
+    <a class="button" data-panel="#queue" data-article="sickbeard">
+      <span class="icon"></span> <label>sickbeard</label>
+    </a>
+  </div>
+
+  <!-- CouchPotato -->
+  <div class="tabbar" ng-show="state == 'couchpotato'">
+    <a class="button" data-panel="#queue" data-article="couchpotato">
+      <span class="icon"></span> <label>couchpotato</label>
+    </a>
+  </div>
+
   <nav>
     <h1>SABnzbd</h1>
   </nav>
@@ -91,7 +109,7 @@ $(function() {
     <section>
       <div id="queue" class="tabbar-panel">
         <h2>Queue <small>({{queue.length}} items)</small></h2>
-        <ul class='list'>
+        <ul class='list' ng-show="queue.length > 0">
           <li class='comp' ng-repeat="item in queue">
             <div>
               <h3>{{item.filename}}</h3>
@@ -120,7 +138,7 @@ $(function() {
           </ul>
         </form>
 
-        <ul class='list'>
+        <ul class='list' ng-show="searchResult.entries.length > 0">
           <li class='comp' ng-repeat="entry in searchResult.entries" ng-click="download(entry)">
             <div>
               <h3>{{entry.title}}</h3>
@@ -135,7 +153,7 @@ $(function() {
 
       <div id="history" class="tabbar-panel">
         <h2>History</h2>
-        <ul class='list'>
+        <ul class='list' ng-show="history.length > 0">
           <li class='comp' ng-repeat="item in history">
             <div>
               <h3>{{item.name}}</h3>
