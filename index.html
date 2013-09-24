@@ -67,7 +67,7 @@ $(function() {
       var article = $(this).attr('data-show-article');
       angular.element(document.getElementById(article)).scope().init();
     });
-    $('.mainnav li:first').trigger('singletap');
+    $('.mainnav li:eq(1)').trigger('singletap');
   })(window.$chocolatechip);
 });
 </script>
@@ -90,8 +90,17 @@ $(function() {
 
   <!-- Sick Beard -->
   <div class="tabbar" ng-show="state == 'sickbeard'">
-    <a class="button" data-panel="#queue" data-article="sickbeard">
-      <span class="icon"></span> <label>sickbeard</label>
+    <a class="button" data-panel="#sb_shows" data-article="sickbeard" data-init="getShows">
+      <span class="icon"></span> <label>Shows</label>
+    </a>
+    <a class="button" data-panel="#sb_search" data-article="sickbeard">
+      <span class="icon"></span> <label>Add show</label>
+    </a>
+    <a class="button" data-panel="#sb_history" data-article="sickbeard" data-init="getHistory">
+      <span class="icon"></span> <label>History</label>
+    </a>
+    <a class="button" data-panel="#sb_stats" data-article="sickbeard" data-init="getStats">
+      <span class="icon"></span> <label>Stats</label>
     </a>
   </div>
 
@@ -178,7 +187,107 @@ $(function() {
   </nav>
   <article id='sickbeard' ng-controller="SickBeardCtrl">
     <section>
-      <h2>sickbeard</h2>
+      <div id="sb_shows" class="tabbar-panel">
+        <h2>Continuing</h2>
+        <ul class='list' ng-show="shows.length > 0">
+          <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()">
+            <div>
+              <h3>{{item.show_name}}</h3>
+              <h4>{{item.network}} - {{item.quality}}</h4>
+            </div>
+            <aside>
+              <h4>{{item.next_ep_airdate}}</h4>
+              <span class='nav'></span>
+            </aside>
+          </li>
+        </ul>
+
+        <h2>Other</h2>
+        <ul class='list' ng-show="shows.length > 0">
+          <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()">
+            <div>
+              <h3>{{item.show_name}}</h3>
+              <h4>{{item.network}} - {{item.quality}}</h4>
+            </div>
+            <aside>
+              <h4>{{item.status}}</h4>
+              <span class='nav'></span>
+            </aside>
+          </li>
+        </ul>
+      </div>
+
+      <div id="sb_search" class="tabbar-panel">
+        <h2>Search</h2>
+        <form ng-submit="search(query)">
+          <ul ui-implements='form' class='list'>
+             <li class='comp' data-goto>
+              <div>
+                <label for='query'>Search query:</label>
+              </div>
+              <aside>
+                <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
+              </aside>
+             </li>
+          </ul>
+        </form>
+
+        <div ng-show="searchResult.results.length > 0">
+          <h2>Found ({{searchResult.results.length + 1}}) results</h2>
+          <ul class='list'>
+            <li class='comp' ng-repeat="entry in searchResult.results" ng-click="addShow(entry)">
+              <div>
+                <h3>{{entry.name}}</h3>
+                <h4>{{entry.first_aired}}</h4>
+              </div>
+              <aside>
+                <span class='nav'></span>
+              </aside>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="sb_history" class="tabbar-panel">
+        <h2>History</h2>
+
+        <ul class='list' ng-show="history.length > 0">
+          <li class='comp' ng-repeat="item in history">
+            <div>
+              <h3>{{item.show_name}} Season: {{item.season}} Episode: {{item.episode}}</h3>
+              <h4>{{item.provider}} {{item.quality}}</h4>
+            </div>
+            <aside>
+              <h4>{{item.status}}</h4>
+              <span class='nav'></span>
+            </aside>
+          </li>
+        </ul>
+      </div>
+
+      <div id="sb_stats" class="tabbar-panel">
+        <h2>Stats</h2>
+
+        <ul class='list'>
+          <li class='switched'>
+            <h3>Episodes downloaded</h3>
+            <h4>{{stats.ep_downloaded}}</h4>
+          </li>
+          <li class='switched'>
+            <h3>Total episodes</h3>
+            <h4>{{stats.ep_total}}</h4>
+          </li>
+          <li class='switched'>
+            <h3>Shows active</h3>
+            <h4>{{stats.shows_active}}</h4>
+          </li>
+          <li class='switched'>
+            <h3>Total shows</h3>
+            <h4>{{stats.shows_total}}</h4>
+          </li>
+        </ul>
+
+      </div>
     </section>
   </article>
 
