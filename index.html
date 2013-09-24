@@ -191,7 +191,11 @@ $(function() {
         <h2>Continuing</h2>
         <ul class='list' ng-show="shows.length > 0">
           <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()">
+            <aside>
+              <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+            </aside>
             <div>
+              <!--  -->
               <h3>{{item.show_name}}</h3>
               <h4>{{item.network}} - {{item.quality}}</h4>
             </div>
@@ -205,6 +209,9 @@ $(function() {
         <h2>Other</h2>
         <ul class='list' ng-show="shows.length > 0">
           <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()">
+            <aside>
+              <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+            </aside>
             <div>
               <h3>{{item.show_name}}</h3>
               <h4>{{item.network}} - {{item.quality}}</h4>
@@ -233,9 +240,12 @@ $(function() {
         </form>
 
         <div ng-show="searchResult.results.length > 0">
-          <h2>Found ({{searchResult.results.length + 1}}) results</h2>
+          <h2>Found ({{searchResult.results.length}}) results</h2>
           <ul class='list'>
             <li class='comp' ng-repeat="entry in searchResult.results" ng-click="addShow(entry)">
+              <aside>
+                <img ng-src="{{getBanner(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+              </aside>
               <div>
                 <h3>{{entry.name}}</h3>
                 <h4>{{entry.first_aired}}</h4>
@@ -253,6 +263,9 @@ $(function() {
 
         <ul class='list' ng-show="history.length > 0">
           <li class='comp' ng-repeat="item in history">
+            <aside>
+              <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+            </aside>
             <div>
               <h3>{{item.show_name}} Season: {{item.season}} Episode: {{item.episode}}</h3>
               <h4>{{item.provider}} {{item.quality}}</h4>

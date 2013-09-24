@@ -32,6 +32,10 @@
         });
       };
 
+      $scope.getBanner = function(show) {
+        return 'http://thetvdb.com/banners/posters/' + show.tvdbid + '-1.jpg';
+      };
+
       $scope.search = function(query) {
         $scope.searchResult = {};
         SickBeardService.searchShows(query).then(function(data) {
@@ -40,17 +44,14 @@
       };
 
       $scope.addShow = function(show) {
-
+        console.log(show);
       };
 
       $scope.getStats = function() {
         SickBeardService.stats().then(function(data) {
           $scope.stats = data;
         });
-        SickBeardService.future().then(function(data) {
-          console.log(data);
-        });
-      }
+      };
 
       // filters
       $scope.statusContinuing = function() {
@@ -62,7 +63,7 @@
         return function(show) {
           return show.status !== 'Continuing';
         };
-      }
+      };
     }
   ]);
 }).call(this);
