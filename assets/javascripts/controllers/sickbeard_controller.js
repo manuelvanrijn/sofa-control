@@ -16,12 +16,16 @@
       };
 
       $scope.getHistory = function() {
+        $rootScope.loading(true);
         SickBeardService.history(25).then(function(data) {
           $scope.history = data;
+        })['finally'](function() {
+          $rootScope.loading(false);
         });
       };
 
       $scope.getShows = function() {
+        $rootScope.loading(true);
         SickBeardService.shows().then(function(data) {
           $scope.shows = [];
           for(var tvdbid in data) {
@@ -29,6 +33,8 @@
             show.tvdbid = tvdbid;
             $scope.shows.push(show);
           }
+        })['finally'](function() {
+          $rootScope.loading(false);
         });
       };
 

@@ -18,42 +18,24 @@
 
   <script src="/bower_components/jquery/jquery.min.js"></script>
   <script src="/bower_components/angular/angular.min.js"></script>
-  <style>
-    article > section, .slide-out > section {
-      height: auto;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+
+  <link rel="stylesheet" href="/assets/stylesheets/style.css">
 </head>
 <script>
 $(function() {
   (function(chui) {
     chui.isiOS = true;
     chui.UISlideout();
-    $('.slide-out > section').append('\
-      <h2>Services</h2>\
-      <ul class="list mainnav">\
-        <li data-show-article="sabnzbd">\
-          <h3><i class="icon-cloud"></i> SABnzbd</h3>\
-        </li>\
-        <li data-show-article="sickbeard">\
-          <h3><i class="icon-cloud"></i> Sick Beard</h3>\
-        </li>\
-        <li data-show-article="couchpotato">\
-          <h3><i class="icon-cloud"></i> CouchPotato</h3>\
-        </li>\
-        <li data-show-article="settings">\
-          <h3><i class="icon-cogs"></i> Settings</h3>\
-        </li>\
-      </ul>');
+    $('.slide-out > section').html($('#slideoutInner').html());
 
     //$('.segmented').UIPanelToggle('#toggle-panels',function(){$.noop;});
     if (chui.isiOS6) $('body').addClass('isiOS6');
     $('.tabbar-panel').addClass('hidden');
     $('.tabbar a.button').on('singletap', function(e) {
       $('.tabbar-panel:not(".hidden")').addClass('hidden');
+
+      $('.tabbar a.selected').removeClass('selected');
+      $(this).addClass('selected');
 
       var id = $(this).attr('data-panel');
       var article = $(this).attr('data-article');
@@ -73,45 +55,67 @@ $(function() {
 });
 </script>
 <body ng-app="sofaControlApp" class="hasTabBar">
-  <!-- SABnzbd -->
+
+  <!-- SLIDEOUT -->
+  <section id="slideoutInner" class="hidden">
+    <h2>Services</h2>
+    <ul class="list mainnav">
+      <li data-show-article="sabnzbd">
+        <h3><i class="icon-cloud"></i> SABnzbd</h3>
+      </li>
+      <li data-show-article="sickbeard">
+        <h3><i class="icon-cloud"></i> Sick Beard</h3>
+      </li>
+      <li data-show-article="couchpotato">
+        <h3><i class="icon-cloud"></i> CouchPotato</h3>
+      </li>
+      <li data-show-article="settings">
+        <h3><i class="icon-cogs"></i> Settings</h3>
+      </li>
+    </ul>
+  </section>
+
+  <!-- TABBARS -->
+  <!-- Tabbar: SABnzbd -->
   <div class="tabbar" ng-show="state == 'sabnzbd'">
     <a class="button" data-panel="#queue" data-article="sabnzbd">
-      <span class="icon"></span> <label>Queue</label>
+      <span class="icon"><i class="icon-tasks"></i></span> <label>Queue</label>
     </a>
     <a class="button" data-panel="#search" data-article="sabnzbd">
-      <span class="icon"></span> <label>Search</label>
+      <span class="icon"><i class="icon-search"></i></span> <label>Search</label>
     </a>
     <a class="button" data-panel="#history" data-article="sabnzbd" data-init="getHistory">
-      <span class="icon"></span> <label>History</label>
+      <span class="icon"><i class="icon-archive"></i></span> <label>History</label>
     </a>
     <a class="button" data-panel="#stats" data-article="sabnzbd">
-      <span class="icon"></span> <label>Stats</label>
+      <span class="icon"><i class="icon-bar-chart"></i></span> <label>Stats</label>
     </a>
   </div>
 
-  <!-- Sick Beard -->
+  <!-- Tabbar: Sick Beard -->
   <div class="tabbar" ng-show="state == 'sickbeard'">
     <a class="button" data-panel="#sb_shows" data-article="sickbeard" data-init="getShows">
-      <span class="icon"></span> <label>Shows</label>
+      <span class="icon"><i class="icon-youtube-play"></i></span> <label>Shows</label>
     </a>
     <a class="button" data-panel="#sb_search" data-article="sickbeard">
-      <span class="icon"></span> <label>Add show</label>
+      <span class="icon"><i class="icon-plus"></i></span> <label>Add show</label>
     </a>
     <a class="button" data-panel="#sb_history" data-article="sickbeard" data-init="getHistory">
-      <span class="icon"></span> <label>History</label>
+      <span class="icon"><i class="icon-archive"></i></span> <label>History</label>
     </a>
     <a class="button" data-panel="#sb_stats" data-article="sickbeard" data-init="getStats">
-      <span class="icon"></span> <label>Stats</label>
+      <span class="icon"><i class="icon-bar-chart"></i></span> <label>Stats</label>
     </a>
   </div>
 
-  <!-- CouchPotato -->
+  <!-- Tabbar: CouchPotato -->
   <div class="tabbar" ng-show="state == 'couchpotato'">
     <a class="button" data-panel="#queue" data-article="couchpotato">
       <span class="icon"></span> <label>couchpotato</label>
     </a>
   </div>
 
+  <!-- SABnzbd Views -->
   <nav>
     <h1>SABnzbd</h1>
   </nav>
@@ -214,6 +218,7 @@ $(function() {
     </section>
   </article>
 
+  <!-- Sick Beard Views -->
   <nav>
     <h1>Sick Beard</h1>
   </nav>
@@ -336,6 +341,7 @@ $(function() {
     </section>
   </article>
 
+  <!-- CouchPotato Views -->
   <nav>
     <h1>CouchPotato</h1>
   </nav>
