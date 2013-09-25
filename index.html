@@ -297,7 +297,7 @@ $(function() {
             <ul class='list'>
               <li class='comp' ng-repeat="entry in searchResult.results" ng-click="showAddShowOptions(entry)">
                 <aside>
-                  <img ng-src="{{getBanner(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                  <img ng-src="{{getPoster(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
                 </aside>
                 <div>
                   <h3>{{entry.name}}</h3>
@@ -334,7 +334,7 @@ $(function() {
           <ul class='list' ng-show="history.length > 0">
             <li class='comp' ng-repeat="item in history">
               <aside>
-                <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
               </aside>
               <div>
                 <h3>{{item.show_name}} Season: {{item.season}} Episode: {{item.episode}}</h3>
