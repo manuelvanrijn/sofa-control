@@ -48,7 +48,9 @@ $(function() {
     });
     $('.mainnav li').on('singletap', function(e) {
       var article = $(this).attr('data-show-article');
-      angular.element(document.getElementById(article)).scope().init();
+      $('article.current').removeClass('current');
+      var articleContainer = $('#' + article).addClass('current');
+      angular.element(articleContainer.get(0)).scope().init();
     });
     $('.mainnav li:first').trigger('singletap');
   })(window.$chocolatechip);
@@ -279,7 +281,7 @@ $(function() {
         <div ng-show="searchResult.results.length > 0">
           <h2>Found ({{searchResult.results.length}}) results</h2>
           <ul class='list'>
-            <li class='comp' ng-repeat="entry in searchResult.results" ng-click="addShow(entry)">
+            <li class='comp' ng-repeat="entry in searchResult.results" ng-click="showAddShowOptions(entry)">
               <aside>
                 <img ng-src="{{getBanner(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
               </aside>
@@ -290,6 +292,23 @@ $(function() {
               <aside>
                 <span class='nav'></span>
               </aside>
+            </li>
+          </ul>
+        </div>
+
+        <div id="addShowOptions" class="hidden">
+          <ul class='list'>
+            <li>
+              <a class='button' data-status="wanted">Wanted</a>
+            </li>
+            <li>
+              <a class='button' data-status="skipped">Skipped</a>
+            </li>
+            <li>
+              <a class='button' data-status="ignored">Ignored</a>
+            </li>
+            <li>
+              <a class='button' data-status="archived">Archived</a>
             </li>
           </ul>
         </div>

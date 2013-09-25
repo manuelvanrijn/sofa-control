@@ -7,3 +7,6 @@ article > section, .slide-out > section {
 .tabbar .icon {
   font-size: 25px;
 }
+.sheet {
+  z-index: 999;
+}

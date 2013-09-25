@@ -52,8 +52,39 @@
         });
       };
 
-      $scope.addShow = function(show) {
-        console.log(show);
+      $scope.addShow = function(show, status) {
+        $rootScope.loading(true);
+        window.$chocolatechip.UIHideSheet();
+        SickBeardService.addShow(show.tvdbid, status).then(function(data) {
+          $rootScope.loading(false);
+
+          window.$chocolatechip.UIPopup({
+            id: 'showAddedPopUp',
+            title: 'New show',
+            message: 'ok', //data.message,
+            cancelButton: false,
+            continueButton: 'OK',
+            callback: function() {
+              $scope.searchResult = {};
+              $scope.query = '';
+              $scope.$apply();
+            }
+          });
+        });
+      };
+
+      $scope.showAddShowOptions = function(show) {
+        window.$chocolatechip.UISheet({
+          id: 'addShowSheet'
+        });
+        $('#addShowSheet section').html($('#addShowOptions').html());
+
+        $('#addShowSheet section a').on('singletap', function(e) {
+          e.preventDefault();
+          $scope.addShow(show, $(this).data('status'));
+        });
+
+        window.$chocolatechip.UIShowSheet();
       };
 
       $scope.getStats = function() {
