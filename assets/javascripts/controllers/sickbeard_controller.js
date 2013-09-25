@@ -1,3 +1,4 @@
+var toeter;
 (function() {
   'use strict';
 
@@ -7,6 +8,9 @@
       $scope.shows = [];
       $scope.searchResult = {};
       $scope.stats = {};
+      $scope.seasons = [];
+      $scope.currentShow = null;
+      $scope.currentSeason = null;
 
       $scope.init = function() {
         $rootScope.state = 'sickbeard';
@@ -26,6 +30,7 @@
 
       $scope.getShows = function() {
         $rootScope.loading(true);
+        $scope.shows = [];
         SickBeardService.shows().then(function(data) {
           $scope.shows = [];
           for(var tvdbid in data) {
@@ -38,9 +43,17 @@
         });
       };
 
-      $scope.getBanner = function(show) {
+      $scope.getPoster = function(show) {
+        if(show === null)
+          return;
         return 'http://thetvdb.com/banners/posters/' + show.tvdbid + '-1.jpg';
       };
+
+      $scope.getBanner = function(show) {
+        if(show === null)
+          return;
+        return 'http://thetvdb.com/banners/graphical/' + show.tvdbid + '-g2.jpg';
+      }
 
       $scope.search = function(query) {
         $rootScope.loading(true);
@@ -72,6 +85,38 @@
           });
         });
       };
+      $scope.goto = function(id, show) {
+        $scope.currentShow = show;
+        $("article#sickbeard section").addClass('hidden')
+        $("article#sickbeard section" + id).removeClass('hidden');
+
+        if($scope.currentShow !== null) {
+          $scope.getSeasons($scope.currentShow);
+        }
+      };
+
+      $scope.getSeasons = function(show) {
+        $scope.seasons = [];
+        $scope.currentSeason = null;
+
+        $rootScope.loading(true);
+        window.$chocolatechip.UIHideSheet();
+        SickBeardService.seasons(show.tvdbid).then(function(data) {
+          $scope.seasons = data;
+          toeter = $scope;
+        })['finally'](function() {
+          $rootScope.loading(false);
+        });
+      };
+
+      $scope.setCurrentSeason = function(season) {
+        $scope.currentSeason = season;
+      };
+
+      $scope.numberOfEpisodes = function(season) {
+        // -1 for the angular $$hashkey property
+        return Object.keys(season).length - 1;
+      }
 
       $scope.showAddShowOptions = function(show) {
         window.$chocolatechip.UISheet({

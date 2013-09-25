@@ -10,3 +10,10 @@ article > section, .slide-out > section {
 .sheet {
   z-index: 999;
 }
+a.button.back, a.button.backTo {
+  padding-left: 40px;
+}
+.banner {
+  margin: 10px auto;
+  display: block;
+}

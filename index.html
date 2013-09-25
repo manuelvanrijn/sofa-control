@@ -221,17 +221,20 @@ $(function() {
   </article>
 
   <!-- Sick Beard Views -->
+<div ng-controller="SickBeardCtrl">
   <nav>
+    <a ng-click="goto('#sickbeard_main', null)" ng-show="currentShow !== null && currentSeason === null" class="button backTo">Back</a>
+    <a ng-click="setCurrentSeason(null)" ng-show="currentSeason !== null" class="button backTo">Back</a>
     <h1>Sick Beard</h1>
   </nav>
-  <article id='sickbeard' ng-controller="SickBeardCtrl">
-    <section>
+  <article id='sickbeard'>
+    <section id="sickbeard_main">
       <div id="sb_shows" class="tabbar-panel">
         <h2>Continuing</h2>
         <ul class='list' ng-show="shows.length > 0">
-          <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()">
+          <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()" ng-click="goto('#sickbeard_show', item)">
             <aside>
-              <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+              <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
             </aside>
             <div>
               <!--  -->
@@ -249,7 +252,7 @@ $(function() {
         <ul class='list' ng-show="shows.length > 0">
           <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()">
             <aside>
-              <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+              <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
             </aside>
             <div>
               <h3>{{item.show_name}}</h3>
@@ -358,7 +361,39 @@ $(function() {
 
       </div>
     </section>
+
+    <section id="sickbeard_show" class="hidden">
+      <img ng-src="{{getBanner(currentShow)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" class="banner" />
+      <!-- Seasons -->
+      <h2 ng-show="currentSeason === null">Seasons</h2>
+      <ul class='list' role='list' ng-show="currentSeason === null">
+        <li class='comp' ng-repeat="season in seasons" ng-click="setCurrentSeason($index)">
+          <div>
+            <h3>Season {{$index}}</h3>
+            <h4>{{numberOfEpisodes(season)}} episodes</h4>
+          </div>
+          <aside>
+            <span class='nav'></span>
+          </aside>
+        </li>
+      </ul>
+      <!-- Episodes -->
+      <h2 ng-show="currentSeason !== null">Episodes <small>Season {{currentSeason}}</small></h2>
+      <ul class='list' role='list' ng-show="currentSeason !== null">
+        <li class='comp' ng-repeat="episode in seasons[currentSeason]">
+          <div>
+            <h3>{{$index + 1}}: {{episode.name}}</h3>
+            <h4>{{episode.airdate}} - {{episode.quality}}</h4>
+          </div>
+          <aside>
+            <h4>{{episode.status}}</h4>
+            <span class='nav'></span>
+          </aside>
+        </li>
+      </ul>
+    </section>
   </article>
+</div>
 
   <!-- CouchPotato Views -->
   <nav>
