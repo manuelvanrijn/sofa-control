@@ -2,6 +2,8 @@
   'use strict';
 
   sofaControlApp.service('NZBClubService', ['$http', '$q', function($http, $q) {
+    this.name = 'NZBClub';
+
     this.search = function(query) {
       var defer = $q.defer();
       var url = 'http://www.nzbclub.com/nzbfeed.aspx?q=' + query + '&ig=2&rpp=100&st=5&sp=1&ns=1';

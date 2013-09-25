@@ -83,7 +83,7 @@ $(function() {
     <a class="button" data-panel="#queue" data-article="sabnzbd">
       <span class="icon"><i class="icon-tasks"></i></span> <label>Queue</label>
     </a>
-    <a class="button" data-panel="#search" data-article="sabnzbd">
+    <a class="button" data-panel="#search" data-article="sabnzbd" data-init="prepareSearch">
       <span class="icon"><i class="icon-search"></i></span> <label>Search</label>
     </a>
     <a class="button" data-panel="#history" data-article="sabnzbd" data-init="getHistory">
@@ -141,16 +141,27 @@ $(function() {
 
       <div id="search" class="tabbar-panel">
         <h2>Search</h2>
-        <form ng-submit="search(query)">
+        <form ng-submit="search(query, providerIndex)">
           <ul ui-implements='form' class='list'>
-             <li class='comp' data-goto>
+            <li class='comp'>
               <div>
                 <label for='query'>Search query:</label>
               </div>
               <aside>
                 <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
               </aside>
-             </li>
+            </li>
+            <li class='comp'>
+              <div>
+                <label for='query'>Search provider:</label>
+              </div>
+              <aside>
+                <select id="providerSelect" ng-model="providerIndex">
+                  <option value="{{$index}}" ng-repeat="p in providers">{{p.name}}</option>
+                </select>
+
+              </aside>
+            </li>
           </ul>
         </form>
 
@@ -221,179 +232,179 @@ $(function() {
   </article>
 
   <!-- Sick Beard Views -->
-<div ng-controller="SickBeardCtrl">
-  <nav>
-    <a ng-click="goto('#sickbeard_main', null)" ng-show="currentShow !== null && currentSeason === null" class="button backTo">Back</a>
-    <a ng-click="setCurrentSeason(null)" ng-show="currentSeason !== null" class="button backTo">Back</a>
-    <h1>Sick Beard</h1>
-  </nav>
-  <article id='sickbeard'>
-    <section id="sickbeard_main">
-      <div id="sb_shows" class="tabbar-panel">
-        <h2>Continuing</h2>
-        <ul class='list' ng-show="shows.length > 0">
-          <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()" ng-click="goto('#sickbeard_show', item)">
-            <aside>
-              <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
-            </aside>
-            <div>
-              <!--  -->
-              <h3>{{item.show_name}}</h3>
-              <h4>{{item.network}} - {{item.quality}}</h4>
-            </div>
-            <aside>
-              <h4>{{item.next_ep_airdate}}</h4>
-              <span class='nav'></span>
-            </aside>
-          </li>
-        </ul>
-
-        <h2>Other</h2>
-        <ul class='list' ng-show="shows.length > 0">
-          <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()">
-            <aside>
-              <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
-            </aside>
-            <div>
-              <h3>{{item.show_name}}</h3>
-              <h4>{{item.network}} - {{item.quality}}</h4>
-            </div>
-            <aside>
-              <h4>{{item.status}}</h4>
-              <span class='nav'></span>
-            </aside>
-          </li>
-        </ul>
-      </div>
-
-      <div id="sb_search" class="tabbar-panel">
-        <h2>Search</h2>
-        <form ng-submit="search(query)">
-          <ul ui-implements='form' class='list'>
-             <li class='comp' data-goto>
+  <div ng-controller="SickBeardCtrl">
+    <nav>
+      <a ng-click="goto('#sickbeard_main', null)" ng-show="currentShow !== null && currentSeason === null" class="button backTo">Back</a>
+      <a ng-click="setCurrentSeason(null)" ng-show="currentSeason !== null" class="button backTo">Back</a>
+      <h1>Sick Beard</h1>
+    </nav>
+    <article id='sickbeard'>
+      <section id="sickbeard_main">
+        <div id="sb_shows" class="tabbar-panel">
+          <h2>Continuing</h2>
+          <ul class='list' ng-show="shows.length > 0">
+            <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()" ng-click="goto('#sickbeard_show', item)">
+              <aside>
+                <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+              </aside>
               <div>
-                <label for='query'>Search query:</label>
+                <!--  -->
+                <h3>{{item.show_name}}</h3>
+                <h4>{{item.network}} - {{item.quality}}</h4>
               </div>
               <aside>
-                <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
+                <h4>{{item.next_ep_airdate}}</h4>
+                <span class='nav'></span>
               </aside>
-             </li>
+            </li>
           </ul>
-        </form>
 
-        <div ng-show="searchResult.results.length > 0">
-          <h2>Found ({{searchResult.results.length}}) results</h2>
-          <ul class='list'>
-            <li class='comp' ng-repeat="entry in searchResult.results" ng-click="showAddShowOptions(entry)">
+          <h2>Other</h2>
+          <ul class='list' ng-show="shows.length > 0">
+            <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()">
               <aside>
-                <img ng-src="{{getBanner(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
               </aside>
               <div>
-                <h3>{{entry.name}}</h3>
-                <h4>{{entry.first_aired}}</h4>
+                <h3>{{item.show_name}}</h3>
+                <h4>{{item.network}} - {{item.quality}}</h4>
               </div>
               <aside>
+                <h4>{{item.status}}</h4>
                 <span class='nav'></span>
               </aside>
             </li>
           </ul>
         </div>
 
-        <div id="addShowOptions" class="hidden">
-          <ul class='list'>
-            <li>
-              <a class='button' data-status="wanted">Wanted</a>
-            </li>
-            <li>
-              <a class='button' data-status="skipped">Skipped</a>
-            </li>
-            <li>
-              <a class='button' data-status="ignored">Ignored</a>
-            </li>
-            <li>
-              <a class='button' data-status="archived">Archived</a>
+        <div id="sb_search" class="tabbar-panel">
+          <h2>Search</h2>
+          <form ng-submit="search(query)">
+            <ul ui-implements='form' class='list'>
+               <li class='comp' data-goto>
+                <div>
+                  <label for='query'>Search query:</label>
+                </div>
+                <aside>
+                  <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
+                </aside>
+               </li>
+            </ul>
+          </form>
+
+          <div ng-show="searchResult.results.length > 0">
+            <h2>Found ({{searchResult.results.length}}) results</h2>
+            <ul class='list'>
+              <li class='comp' ng-repeat="entry in searchResult.results" ng-click="showAddShowOptions(entry)">
+                <aside>
+                  <img ng-src="{{getBanner(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                </aside>
+                <div>
+                  <h3>{{entry.name}}</h3>
+                  <h4>{{entry.first_aired}}</h4>
+                </div>
+                <aside>
+                  <span class='nav'></span>
+                </aside>
+              </li>
+            </ul>
+          </div>
+
+          <div id="addShowOptions" class="hidden">
+            <ul class='list'>
+              <li>
+                <a class='button' data-status="wanted">Wanted</a>
+              </li>
+              <li>
+                <a class='button' data-status="skipped">Skipped</a>
+              </li>
+              <li>
+                <a class='button' data-status="ignored">Ignored</a>
+              </li>
+              <li>
+                <a class='button' data-status="archived">Archived</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="sb_history" class="tabbar-panel">
+          <h2>History</h2>
+
+          <ul class='list' ng-show="history.length > 0">
+            <li class='comp' ng-repeat="item in history">
+              <aside>
+                <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+              </aside>
+              <div>
+                <h3>{{item.show_name}} Season: {{item.season}} Episode: {{item.episode}}</h3>
+                <h4>{{item.provider}} {{item.quality}}</h4>
+              </div>
+              <aside>
+                <h4>{{item.status}}</h4>
+                <span class='nav'></span>
+              </aside>
             </li>
           </ul>
         </div>
-      </div>
 
-      <div id="sb_history" class="tabbar-panel">
-        <h2>History</h2>
+        <div id="sb_stats" class="tabbar-panel">
+          <h2>Stats</h2>
 
-        <ul class='list' ng-show="history.length > 0">
-          <li class='comp' ng-repeat="item in history">
-            <aside>
-              <img ng-src="{{getBanner(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
-            </aside>
+          <ul class='list'>
+            <li class='switched'>
+              <h3>Episodes downloaded</h3>
+              <h4>{{stats.ep_downloaded}}</h4>
+            </li>
+            <li class='switched'>
+              <h3>Total episodes</h3>
+              <h4>{{stats.ep_total}}</h4>
+            </li>
+            <li class='switched'>
+              <h3>Shows active</h3>
+              <h4>{{stats.shows_active}}</h4>
+            </li>
+            <li class='switched'>
+              <h3>Total shows</h3>
+              <h4>{{stats.shows_total}}</h4>
+            </li>
+          </ul>
+
+        </div>
+      </section>
+
+      <section id="sickbeard_show" class="hidden">
+        <img ng-src="{{getBanner(currentShow)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" class="banner" />
+        <!-- Seasons -->
+        <h2 ng-show="currentSeason === null">Seasons</h2>
+        <ul class='list' role='list' ng-show="currentSeason === null">
+          <li class='comp' ng-repeat="season in seasons" ng-click="setCurrentSeason($index)">
             <div>
-              <h3>{{item.show_name}} Season: {{item.season}} Episode: {{item.episode}}</h3>
-              <h4>{{item.provider}} {{item.quality}}</h4>
+              <h3>Season {{$index}}</h3>
+              <h4>{{numberOfEpisodes(season)}} episodes</h4>
             </div>
             <aside>
-              <h4>{{item.status}}</h4>
               <span class='nav'></span>
             </aside>
           </li>
         </ul>
-      </div>
-
-      <div id="sb_stats" class="tabbar-panel">
-        <h2>Stats</h2>
-
-        <ul class='list'>
-          <li class='switched'>
-            <h3>Episodes downloaded</h3>
-            <h4>{{stats.ep_downloaded}}</h4>
-          </li>
-          <li class='switched'>
-            <h3>Total episodes</h3>
-            <h4>{{stats.ep_total}}</h4>
-          </li>
-          <li class='switched'>
-            <h3>Shows active</h3>
-            <h4>{{stats.shows_active}}</h4>
-          </li>
-          <li class='switched'>
-            <h3>Total shows</h3>
-            <h4>{{stats.shows_total}}</h4>
+        <!-- Episodes -->
+        <h2 ng-show="currentSeason !== null">Episodes <small>Season {{currentSeason}}</small></h2>
+        <ul class='list' role='list' ng-show="currentSeason !== null">
+          <li class='comp' ng-repeat="episode in seasons[currentSeason]">
+            <div>
+              <h3>{{$index + 1}}: {{episode.name}}</h3>
+              <h4>{{episode.airdate}} - {{episode.quality}}</h4>
+            </div>
+            <aside>
+              <h4>{{episode.status}}</h4>
+              <span class='nav'></span>
+            </aside>
           </li>
         </ul>
-
-      </div>
-    </section>
-
-    <section id="sickbeard_show" class="hidden">
-      <img ng-src="{{getBanner(currentShow)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" class="banner" />
-      <!-- Seasons -->
-      <h2 ng-show="currentSeason === null">Seasons</h2>
-      <ul class='list' role='list' ng-show="currentSeason === null">
-        <li class='comp' ng-repeat="season in seasons" ng-click="setCurrentSeason($index)">
-          <div>
-            <h3>Season {{$index}}</h3>
-            <h4>{{numberOfEpisodes(season)}} episodes</h4>
-          </div>
-          <aside>
-            <span class='nav'></span>
-          </aside>
-        </li>
-      </ul>
-      <!-- Episodes -->
-      <h2 ng-show="currentSeason !== null">Episodes <small>Season {{currentSeason}}</small></h2>
-      <ul class='list' role='list' ng-show="currentSeason !== null">
-        <li class='comp' ng-repeat="episode in seasons[currentSeason]">
-          <div>
-            <h3>{{$index + 1}}: {{episode.name}}</h3>
-            <h4>{{episode.airdate}} - {{episode.quality}}</h4>
-          </div>
-          <aside>
-            <h4>{{episode.status}}</h4>
-            <span class='nav'></span>
-          </aside>
-        </li>
-      </ul>
-    </section>
-  </article>
-</div>
+      </section>
+    </article>
+  </div>
 
   <!-- CouchPotato Views -->
   <nav>

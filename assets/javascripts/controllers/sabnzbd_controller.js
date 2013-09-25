@@ -12,7 +12,19 @@
         $rootScope.state = 'sabnzbd';
         $rootScope.$apply();
 
+        // setup providers
+        $scope.providers = [];
+        $scope.providers.push(NZBIndexService);
+        $scope.providers.push(NZBClubService);
+
         $('.tabbar:visible a.button:first').trigger('singletap');
+      };
+
+      $scope.prepareSearch = function() {
+        $scope.providerIndex = 0;
+        $scope.query = '';
+        $scope.searchResult = {};
+        $("#providerSelect").get(0).selectedIndex = 1;
       };
 
       $scope.getHistory = function() {
@@ -34,10 +46,11 @@
         return hours + ':' + minutes + '.' + seconds;
       };
 
-      $scope.search = function(query) {
+      $scope.search = function(query, providerIndex) {
         $rootScope.loading(true);
-        // PROVIDER: NZBIndex
-        NZBIndexService.search(query).then(function(response) {
+
+        var provider = $scope.providers[providerIndex];
+        provider.search(query).then(function(response) {
           $scope.searchResult = response.data.responseData.feed;
         }, function(error) {
           $scope.searchResult = {};
@@ -45,16 +58,6 @@
         })['finally'](function() {
           $rootScope.loading(false);
         });
-
-        // PROVIDER: NZBClub
-        // NZBClubService.search(query).then(function(response) {
-        //   $scope.searchResult = response.data.responseData.feed;
-        // }, function(error) {
-        //   $scope.searchResult = {};
-        //   console.log(error);
-        // })['finally'](function() {
-        //   $rootScope.loading(false);
-        // });;
       };
 
       $scope.download = function(entry) {

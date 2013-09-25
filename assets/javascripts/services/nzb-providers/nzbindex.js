@@ -2,6 +2,8 @@
   'use strict';
 
   sofaControlApp.service('NZBIndexService', ['$http', '$q', function($http, $q) {
+    this.name = 'NZBIndex';
+
     this.search = function(query) {
       var defer = $q.defer();
       var url = 'http://www.nzbindex.nl/rss/?q=' + query + '&sort=agedesc&hidecross=1&max=100&more=1';

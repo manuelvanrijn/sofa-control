@@ -1,4 +1,3 @@
-var toeter;
 (function() {
   'use strict';
 
@@ -103,7 +102,6 @@ var toeter;
         window.$chocolatechip.UIHideSheet();
         SickBeardService.seasons(show.tvdbid).then(function(data) {
           $scope.seasons = data;
-          toeter = $scope;
         })['finally'](function() {
           $rootScope.loading(false);
         });
