@@ -32,12 +32,15 @@
       };
 
       $scope.search = function(query) {
+        $rootScope.loading(true);
         // PROVIDER: NZBIndex
         NZBIndexService.search(query).then(function(response) {
           $scope.searchResult = response.data.responseData.feed;
         }, function(error) {
           $scope.searchResult = {};
           console.log(error);
+        })['finally'](function() {
+          $rootScope.loading(false);
         });
 
         // PROVIDER: NZBClub
@@ -46,7 +49,9 @@
         // }, function(error) {
         //   $scope.searchResult = {};
         //   console.log(error);
-        // });
+        // })['finally'](function() {
+        //   $rootScope.loading(false);
+        // });;
       };
 
       $scope.download = function(entry) {

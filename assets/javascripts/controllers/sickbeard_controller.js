@@ -37,9 +37,12 @@
       };
 
       $scope.search = function(query) {
+        $rootScope.loading(true);
         $scope.searchResult = {};
         SickBeardService.searchShows(query).then(function(data) {
           $scope.searchResult = data;
+        })['finally'](function() {
+          $rootScope.loading(false);
         });
       };
 
