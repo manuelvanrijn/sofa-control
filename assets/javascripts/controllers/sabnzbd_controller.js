@@ -6,6 +6,7 @@
       $scope.queue = [];
       $scope.history = [];
       $scope.searchResult = {};
+      $scope.stats = {};
 
       $scope.init = function() {
         $rootScope.state = 'sabnzbd';
@@ -67,8 +68,26 @@
         });
       };
 
-      var updateQueue = function() {
+      var updateQueueAndStats = function() {
         SABnzbdService.queue().then(function(data) {
+          $scope.stats = {
+            kbpersec: data.kbpersec,
+            status: data.status,
+            timeleft: data.timeleft,
+            uptime: data.uptime,
+            version: data.version,
+            diskspace1: data.diskspace1,
+            diskspacetotal1: data.diskspacetotal1,
+            diskspace2: data.diskspace2,
+            diskspacetotal2: data.diskspacetotal2,
+          };
+
+          // remove values for disk 2 if same as disk 1
+          if($scope.stats.diskspace1 === $scope.stats.diskspace2 && $scope.stats.diskspacetotal1 === $scope.stats.diskspacetotal2) {
+            $scope.stats.diskspace2 = 0;
+            $scope.stats.diskspacetotal2 = 0;
+          }
+
           $scope.queue = data.slots;
           if(!$scope.$$phase) {
             $scope.$apply();
@@ -76,8 +95,8 @@
         });
       };
 
-      //setInterval(updateQueue, 1000);
-      updateQueue();
+      //setInterval(updateQueueAndStats, 1000);
+      updateQueueAndStats();
     }
   ]);
 }).call(this);

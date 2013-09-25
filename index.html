@@ -178,6 +178,37 @@ $(function() {
 
       <div id="stats" class="tabbar-panel">
         <h2>Stats</h2>
+
+        <ul class='list'>
+          <li class='switched'>
+            <h3>Status</h3>
+            <h4>{{stats.status}}</h4>
+          </li>
+          <li class='switched'>
+            <h3>Download speed</h3>
+            <h4>{{stats.kbpersec}}</h4>
+          </li>
+          <li class='switched'>
+            <h3>Time left</h3>
+            <h4>{{stats.timeleft}}</h4>
+          </li>
+          <li class='switched'>
+            <h3>Disk1</h3>
+            <h4>{{stats.diskspace1}} GB/ {{stats.diskspacetotal1}} GB</h4>
+          </li>
+          <li class='switched'>
+            <h3>Disk2</h3>
+            <h4>{{stats.diskspace2}} GB/ {{stats.diskspacetotal2}} GB</h4>
+          </li>
+          <li class='switched'>
+            <h3>Uptime</h3>
+            <h4>{{stats.uptime}}</h4>
+          </li>
+          <li class='switched'>
+            <h3>Version</h3>
+            <h4>{{stats.version}}</h4>
+          </li>
+        </ul>
       </div>
     </section>
   </article>
