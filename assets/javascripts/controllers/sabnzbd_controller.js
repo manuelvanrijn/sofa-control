@@ -1,8 +1,8 @@
 (function() {
   'use strict';
 
-  sofaControlApp.controller('SabnzbCtrl', ['$scope', '$rootScope', 'SABnzbdService', 'NZBIndexService',
-    function($scope, $rootScope, SABnzbdService, NZBIndexService) {
+  sofaControlApp.controller('SabnzbCtrl', ['$scope', '$rootScope', 'SABnzbdService', 'NZBIndexService', 'NZBClubService',
+    function($scope, $rootScope, SABnzbdService, NZBIndexService, NZBClubService) {
       $scope.queue = [];
       $scope.history = [];
       $scope.searchResult = {};
@@ -31,12 +31,21 @@
       };
 
       $scope.search = function(query) {
+        // PROVIDER: NZBIndex
         NZBIndexService.search(query).then(function(response) {
           $scope.searchResult = response.data.responseData.feed;
         }, function(error) {
           $scope.searchResult = {};
           console.log(error);
         });
+
+        // PROVIDER: NZBClub
+        // NZBClubService.search(query).then(function(response) {
+        //   $scope.searchResult = response.data.responseData.feed;
+        // }, function(error) {
+        //   $scope.searchResult = {};
+        //   console.log(error);
+        // });
       };
 
       $scope.download = function(entry) {
@@ -47,8 +56,13 @@
           cancelButton: 'Cancel',
           continueButton: 'Download',
           callback: function() {
-            var link = entry.link.replace('/release/', '/download/');
-            SABnzbdService.addTaskByUrl(link, entry.title);
+            // PROVIDER: NZBIndex
+            var url = NZBIndexService.getDownloadUrl(entry);
+
+            // PROVIDER: NZBClub
+            //var url = NZBClubService.getDownloadUrl(entry);
+
+            SABnzbdService.addTaskByUrl(url);
           }
         });
       };

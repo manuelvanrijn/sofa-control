@@ -33,6 +33,10 @@
       });
     };
 
+    this.getDownloadUrl = function(entry) {
+      return entry.link.replace('/release/', '/download/');
+    };
+
     this.feedToJson = function(feedUrl) {
       var url = 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=100&callback=JSON_CALLBACK&q=' + feedUrl;
       return $http.jsonp(url);

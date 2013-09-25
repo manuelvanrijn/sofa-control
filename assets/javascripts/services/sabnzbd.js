@@ -22,8 +22,8 @@
       });
     };
 
-    this.addTaskByUrl = function(nzbUrl, friendlyName) {
-      var url = this.url + '&mode=addurl&name=' + nzbUrl + '&nzbname=' + friendlyName;
+    this.addTaskByUrl = function(nzbUrl) {
+      var url = this.url + '&mode=addurl&name=' + nzbUrl;
       return $http.jsonp(url + '&callback=JSON_CALLBACK').then(function(resp) {
         return resp.data;
       });

@@ -67,7 +67,7 @@ $(function() {
       var article = $(this).attr('data-show-article');
       angular.element(document.getElementById(article)).scope().init();
     });
-    $('.mainnav li:eq(1)').trigger('singletap');
+    $('.mainnav li:first').trigger('singletap');
   })(window.$chocolatechip);
 });
 </script>
@@ -333,6 +333,7 @@ $(function() {
   <script src="/assets/javascripts/services/couchpotato.js"></script>
   <!-- SERVICES: NZB Providers -->
   <script src="/assets/javascripts/services/nzb-providers/nzbindex.js"></script>
+  <script src="/assets/javascripts/services/nzb-providers/nzbclub.js"></script>
   <!-- CONTROLLERS -->
   <script src="/assets/javascripts/controllers/sabnzbd_controller.js"></script>
   <script src="/assets/javascripts/controllers/sickbeard_controller.js"></script>
