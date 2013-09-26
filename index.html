@@ -5,6 +5,7 @@
   <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="msapplication-tap-highlight" content="no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Sofa Control</title>
 
   <link rel="stylesheet" href="/bower_components/chocolatechip-ui/chui/chui.ios-3.0.2.css">
@@ -151,17 +152,10 @@ $(function() {
                 <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
               </aside>
             </li>
-            <li class='comp'>
-              <div>
-                <label for='query'>Search provider:</label>
-              </div>
-              <aside>
-                <select id="providerSelect" ng-model="providerIndex">
-                  <option value="{{$index}}" ng-repeat="p in providers">{{p.name}}</option>
-                </select>
-
-              </aside>
-            </li>
+          </ul>
+          <h2>NZB search providers:</h2>
+          <ul class='list' id="providerList">
+            <li data-index="{{$index}}" ng-repeat="provider in providers"><h3>{{provider.name}}</h3></li>
           </ul>
         </form>
 

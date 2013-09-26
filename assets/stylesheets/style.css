@@ -1,5 +1,7 @@
-article > section, .slide-out > section {
+article > section {
   height: auto;
+  top: -15px;
+  padding-top: 0;
 }
 .hidden {
   display: none;

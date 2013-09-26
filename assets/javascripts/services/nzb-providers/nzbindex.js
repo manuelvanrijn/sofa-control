@@ -22,7 +22,11 @@
       var _this = this;
       _this.feedToJson(randUrl).then(function(response) {
         if(times === 10) {
-          defer.reject('failed after 10 times');
+          defer.reject({
+            responseData: null,
+            responseDetails: "Feed could not be loaded after 10 attempts.",
+            responseStatus: 400
+          });
         }
         else {
           if (response.data.responseStatus !== 200) {

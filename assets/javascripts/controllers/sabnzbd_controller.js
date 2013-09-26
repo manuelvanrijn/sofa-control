@@ -7,6 +7,7 @@
       $scope.history = [];
       $scope.searchResult = {};
       $scope.stats = {};
+      $scope.providerIndex = 0;
 
       $scope.init = function() {
         $rootScope.state = 'sabnzbd';
@@ -21,10 +22,17 @@
       };
 
       $scope.prepareSearch = function() {
-        $scope.providerIndex = 0;
         $scope.query = '';
         $scope.searchResult = {};
-        $('#providerSelect').get(0).selectedIndex = 1;
+        if($('#providerList').hasClass('select') === false) {
+          window.$chocolatechip('#providerList').UISelectList({
+            selected: $scope.providerIndex,
+            callback: function() {
+              $scope.providerIndex = parseInt($(this).data('index'), 10);
+            }
+          });
+        }
+        $scope.$apply();
       };
 
       $scope.getHistory = function() {
@@ -52,11 +60,21 @@
         var provider = $scope.providers[providerIndex];
         provider.search(query).then(function(response) {
           $scope.searchResult = response.data.responseData.feed;
-        }, function(error) {
-          $scope.searchResult = {};
-          console.log(error);
-        })['finally'](function() {
           $rootScope.loading(false);
+        }, function(error) {
+          window.$chocolatechip.UIPopup({
+            id: 'showAddesearchErrordPopUp',
+            title: 'Search error',
+            message: error.responseDetails,
+            cancelButton: false,
+            continueButton: 'OK',
+            callback: function() {
+              $scope.searchResult = {};
+              if(!$scope.$$phase) {
+                $scope.$apply();
+              }
+            }
+          });
         });
       };
 
@@ -68,13 +86,23 @@
           cancelButton: 'Cancel',
           continueButton: 'Download',
           callback: function() {
-            // PROVIDER: NZBIndex
-            var url = NZBIndexService.getDownloadUrl(entry);
-
-            // PROVIDER: NZBClub
-            //var url = NZBClubService.getDownloadUrl(entry);
-
-            SABnzbdService.addTaskByUrl(url);
+            var provider = $scope.providers[$scope.providerIndex];
+            var url = provider.getDownloadUrl(entry);
+            SABnzbdService.addTaskByUrl(url).then(function(data) {
+              var title = 'Success';
+              var message = 'Download added to the queue';
+              if(data.status !== true) {
+                title = 'Failed';
+                message = 'Download could not be added to the queue';
+              }
+              window.$chocolatechip.UIPopup({
+                id: 'addDownload',
+                title: title,
+                message: message,
+                cancelButton: false,
+                continueButton: 'OK'
+              });
+            });
           }
         });
       };
