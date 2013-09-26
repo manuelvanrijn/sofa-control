@@ -1,6 +1,6 @@
 Sofa Control:
   BUGS:
-    ☐ When adding/removing a service the slide out navigation doesn't work anymore
+    ✔ When adding/removing a service the slide out navigation doesn't work anymore @done (13-09-26 18:46)
 
   SABnzbd:
     API DOC: http://wiki.sabnzbd.org/api

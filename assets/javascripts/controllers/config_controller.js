@@ -34,7 +34,6 @@
       };
 
       $scope.new = function(type) {
-        console.log(type);
         $scope.showForm = true;
         $scope.editServer = {
           serverType: type
