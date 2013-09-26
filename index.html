@@ -112,111 +112,132 @@ $(function() {
   </div>
 
   <!-- SABnzbd Views -->
-  <nav>
-    <h1>SABnzbd</h1>
-  </nav>
-  <article id='sabnzbd' ng-controller="SabnzbCtrl">
-    <section>
-      <div id="queue" class="tabbar-panel">
-        <h2>Queue <small>({{queue.length}} items)</small></h2>
-        <ul class='list' ng-show="queue.length > 0">
-          <li class='comp' ng-repeat="item in queue">
-            <div>
-              <h3>{{item.filename}}</h3>
-              <h4>{{item.mbleft}} / {{item.mb}} MB</h4>
-            </div>
-            <aside>
-              <h4>{{item.timeleft}}</h4>
-              <span class='nav'></span>
-            </aside>
-          </li>
-        </ul>
-      </div>
-
-      <div id="search" class="tabbar-panel">
-        <h2>Search</h2>
-        <form ng-submit="search(query, providerIndex)">
-          <ul ui-implements='form' class='list'>
-            <li class='comp'>
+  <div ng-controller="SabnzbCtrl">
+    <nav>
+      <h1>SABnzbd</h1>
+      <a class='button' ng-click="toggleServerState()">
+        <i class="icon-pause" ng-show="stats.status != 'Paused'"></i>
+        <i class="icon-play"  ng-show="stats.status == 'Paused'"></i>
+      </a>
+    </nav>
+    <article id='sabnzbd'>
+      <section>
+        <div id="queue" class="tabbar-panel">
+          <h2>Queue <small>({{queue.length}} items)</small></h2>
+          <ul class='list' ng-show="queue.length > 0">
+            <li class='comp' ng-repeat="item in queue" data-goto ng-click="showQueueOptions(item)">
               <div>
-                <label for='query'>Search query:</label>
+                <h3>{{item.filename}}</h3>
+                <h4>{{item.mbleft}} / {{item.mb}} MB</h4>
               </div>
               <aside>
-                <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
+                <h4 ng-hide="item.status == 'Paused'">{{item.timeleft}}</h4>
+                <h4 ng-show="item.status == 'Paused'">{{item.status}}</h4>
+                <span class='nav'></span>
               </aside>
             </li>
           </ul>
-          <h2>NZB search providers:</h2>
-          <ul class='list' id="providerList">
-            <li data-index="{{$index}}" ng-repeat="provider in providers"><h3>{{provider.name}}</h3></li>
+        </div>
+
+        <div id="queueOptions" class="hidden">
+          <ul class='list'>
+            <li ng-hide="currentTask.status == 'Paused'" ng-click="pauseTask()">
+              <a class='button' data-status="pause">Pause</a>
+            </li>
+            <li ng-click="resumeTask()" ng-show="currentTask.status == 'Paused'">
+              <a class='button' data-status="skipped">Resume</a>
+            </li>
+            <li ng-click="deleteTask()">
+              <a class='button' data-status="ignored">Delete</a>
+            </li>
           </ul>
-        </form>
+        </div>
 
-        <ul class='list' ng-show="searchResult.entries.length > 0">
-          <li class='comp' ng-repeat="entry in searchResult.entries" ng-click="download(entry)">
-            <div>
-              <h3>{{entry.title}}</h3>
-              <h4>{{entry.contentSnippet}}</h4>
-            </div>
-            <aside>
-              <span class='nav'></span>
-            </aside>
-          </li>
-        </ul>
-      </div>
+        <div id="search" class="tabbar-panel">
+          <h2>Search</h2>
+          <form ng-submit="search(query, providerIndex)">
+            <ul ui-implements='form' class='list'>
+              <li class='comp'>
+                <div>
+                  <label for='query'>Search query:</label>
+                </div>
+                <aside>
+                  <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
+                </aside>
+              </li>
+            </ul>
+            <h2>NZB search providers:</h2>
+            <ul class='list' id="providerList">
+              <li data-index="{{$index}}" ng-repeat="provider in providers"><h3>{{provider.name}}</h3></li>
+            </ul>
+          </form>
 
-      <div id="history" class="tabbar-panel">
-        <h2>History</h2>
-        <ul class='list' ng-show="history.length > 0">
-          <li class='comp' ng-repeat="item in history">
-            <div>
-              <h3>{{item.name}}</h3>
-              <h4>Finished in: {{secondsToTime(item.download_time)}}</h4>
-            </div>
-            <aside>
-              <h4>{{item.status}}</h4>
-              <span class='nav'></span>
-            </aside>
-          </li>
-        </ul>
-      </div>
+          <ul class='list' ng-show="searchResult.entries.length > 0">
+            <li class='comp' ng-repeat="entry in searchResult.entries" ng-click="download(entry)">
+              <div>
+                <h3>{{entry.title}}</h3>
+                <h4>{{entry.contentSnippet}}</h4>
+              </div>
+              <aside>
+                <span class='nav'></span>
+              </aside>
+            </li>
+          </ul>
+        </div>
 
-      <div id="stats" class="tabbar-panel">
-        <h2>Stats</h2>
+        <div id="history" class="tabbar-panel">
+          <h2>History</h2>
+          <ul class='list' ng-show="history.length > 0">
+            <li class='comp' ng-repeat="item in history">
+              <div>
+                <h3>{{item.name}}</h3>
+                <h4>Finished in: {{secondsToTime(item.download_time)}}</h4>
+              </div>
+              <aside>
+                <h4>{{item.status}}</h4>
+                <span class='nav'></span>
+              </aside>
+            </li>
+          </ul>
+        </div>
 
-        <ul class='list'>
-          <li class='switched'>
-            <h3>Status</h3>
-            <h4>{{stats.status}}</h4>
-          </li>
-          <li class='switched'>
-            <h3>Download speed</h3>
-            <h4>{{stats.kbpersec}}</h4>
-          </li>
-          <li class='switched'>
-            <h3>Time left</h3>
-            <h4>{{stats.timeleft}}</h4>
-          </li>
-          <li class='switched'>
-            <h3>Disk1</h3>
-            <h4>{{stats.diskspace1}} GB/ {{stats.diskspacetotal1}} GB</h4>
-          </li>
-          <li class='switched'>
-            <h3>Disk2</h3>
-            <h4>{{stats.diskspace2}} GB/ {{stats.diskspacetotal2}} GB</h4>
-          </li>
-          <li class='switched'>
-            <h3>Uptime</h3>
-            <h4>{{stats.uptime}}</h4>
-          </li>
-          <li class='switched'>
-            <h3>Version</h3>
-            <h4>{{stats.version}}</h4>
-          </li>
-        </ul>
-      </div>
-    </section>
-  </article>
+        <div id="stats" class="tabbar-panel">
+          <h2>Stats</h2>
+
+          <ul class='list'>
+            <li class='switched'>
+              <h3>Status</h3>
+              <h4>{{stats.status}}</h4>
+            </li>
+            <li class='switched'>
+              <h3>Download speed</h3>
+              <h4>{{stats.kbpersec}}</h4>
+            </li>
+            <li class='switched'>
+              <h3>Time left</h3>
+              <h4>{{stats.timeleft}}</h4>
+            </li>
+            <li class='switched'>
+              <h3>Disk1</h3>
+              <h4>{{stats.diskspace1}} GB/ {{stats.diskspacetotal1}} GB</h4>
+            </li>
+            <li class='switched'>
+              <h3>Disk2</h3>
+              <h4>{{stats.diskspace2}} GB/ {{stats.diskspacetotal2}} GB</h4>
+            </li>
+            <li class='switched'>
+              <h3>Uptime</h3>
+              <h4>{{stats.uptime}}</h4>
+            </li>
+            <li class='switched'>
+              <h3>Version</h3>
+              <h4>{{stats.version}}</h4>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </article>
+  </div>
 
   <!-- Sick Beard Views -->
   <div ng-controller="SickBeardCtrl">

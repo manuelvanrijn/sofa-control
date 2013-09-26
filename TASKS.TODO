@@ -2,6 +2,14 @@ Sofa Control:
   BUGS:
     ✔ When adding/removing a service the slide out navigation doesn't work anymore @done (13-09-26 18:46)
 
+  Features:
+    ✔ SABnzbd queue delete, pause, resume @done (13-09-26 23:18)
+    ☐ SABnzbd queue priority
+    ✔ SABnzbd pause/resume server @done (13-09-26 23:33)
+    ☐ SickBeard Seasons/Episodes banner width
+    ☐ CP wanted list
+    ☐ CP search/add
+
   SABnzbd:
     API DOC: http://wiki.sabnzbd.org/api
     API Calls:

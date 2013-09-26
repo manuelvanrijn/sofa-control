@@ -1,3 +1,4 @@
+var scope;
 (function() {
   'use strict';
 
@@ -9,6 +10,7 @@
       $scope.stats = {};
       $scope.providerIndex = 0;
 
+scope = $scope;
       $scope.init = function() {
         $rootScope.state = 'sabnzbd';
         $rootScope.$apply();
@@ -20,6 +22,59 @@
 
         $('.tabbar:visible a.button:first').trigger('singletap');
         updateQueueAndStats();
+      };
+
+      $scope.showQueueOptions = function(task) {
+        $scope.currentTask = task;
+        window.$chocolatechip.UISheet({
+          id: 'queueSheet'
+        });
+
+        setTimeout(function() {
+          $('#queueSheet section').html($('#queueOptions').children().clone(true, true));
+          $('#queueSheet section a').on('singletap', function(e) {
+            e.preventDefault();
+            //$scope.addShow(show, $(this).data('status'));
+          });
+        }, 300);
+
+        window.$chocolatechip.UIShowSheet();
+      };
+
+      $scope.resumeTask = function() {
+        SABnzbdService.resumeTask($scope.currentTask.nzo_id).then(function(data) {
+          window.$chocolatechip.UIHideSheet();
+        });
+
+      };
+
+      $scope.pauseTask = function() {
+        SABnzbdService.pauseTask($scope.currentTask.nzo_id).then(function(data) {
+          window.$chocolatechip.UIHideSheet();
+        });
+      };
+
+      $scope.deleteTask = function() {
+        window.$chocolatechip.UIPopup({
+          id: 'warning',
+          title: 'Confirm removal',
+          message: 'Are you sure you want to delete the task "' + $scope.currentTask.filename + '"?',
+          cancelButton: 'Cancel',
+          continueButton: 'Delete',
+          callback: function() {
+            window.$chocolatechip.UIHideSheet();
+            SABnzbdService.deleteTask($scope.currentTask.nzo_id);
+          }
+        });
+      };
+
+      $scope.toggleServerState = function() {
+        if($scope.stats.status === 'Paused') {
+          SABnzbdService.resumeDownloads();
+        }
+        else {
+          SABnzbdService.pauseDownloads();
+        }
       };
 
       $scope.prepareSearch = function() {
@@ -135,7 +190,7 @@
         });
       };
 
-      //setInterval(updateQueueAndStats, 2000);
+      setInterval(updateQueueAndStats, 2000);
     }
   ]);
 }).call(this);
