@@ -256,11 +256,12 @@ $(function() {
 
             <h2>Other</h2>
             <ul class='list' ng-show="shows.length > 0">
-              <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()">
+              <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()" ng-click="setShow(item)">
                 <aside>
                   <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
                 </aside>
                 <div>
+                  <!--  -->
                   <h3>{{item.show_name}}</h3>
                   <h4>{{item.network}} - {{item.quality}}</h4>
                 </div>
