@@ -1,4 +1,7 @@
 Sofa Control:
+  BUGS:
+    ☐ When adding/removing a service the slide out navigation doesn't work anymore
+
   SABnzbd:
     API DOC: http://wiki.sabnzbd.org/api
     API Calls:
@@ -36,7 +39,3 @@ Sofa Control:
      ✔ movies @done (13-09-19 17:27)
      ✔ addMovie @done (13-09-19 17:27)
      ✔ profiles @done (13-09-19 17:27)
-
-  Config:
-    - To modify config.js run: git update-index --no-assume-unchanged config.js
-    - After change and commit run: git update-index --assume-unchanged config.js

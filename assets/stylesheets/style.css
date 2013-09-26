@@ -25,3 +25,9 @@ a.button.back, a.button.backTo {
 nav > h1 {
   z-index: 0;
 }
+h2.no-margin-top {
+  margin-top: 0;
+}
+.u {
+  text-decoration: underline;
+}

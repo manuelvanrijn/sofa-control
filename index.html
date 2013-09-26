@@ -28,8 +28,8 @@ $(function() {
   (function(chui) {
     chui.isiOS = true;
     chui.UISlideout();
-    $('.slide-out > section').html($('#slideoutInner div').clone(true, true));
 
+    //$('.slide-out > section').html($('#slideoutInner div').clone(true, true));
     //$('.segmented').UIPanelToggle('#toggle-panels',function(){$.noop;});
     if (chui.isiOS6) $('body').addClass('isiOS6');
     $('.tabbar-panel').addClass('hidden');
@@ -51,12 +51,12 @@ $(function() {
     $('.mainnav li').on('singletap', function(e) {
       var current_article = $('#' + $(this).attr('data-show-article'));
       $('article, nav:not("#global-nav")').addClass('hidden').removeClass('current');
-      current_article.removeClass('hidden').addClass('current');
-      current_article.prev().removeClass('hidden');
+      current_article.removeClass('hidden').addClass('current show');
+      current_article.prev().removeClass('hidden').addClass('current show');
       angular.element(current_article.get(0)).scope().init();
     });
 
-    $('article, nav:not("#global-nav")').removeClass('current').addClass('hidden');
+    $('article, nav:not("#global-nav")').removeClass('current show').addClass('hidden');
 
     var firstItem = $('.mainnav li:first');
     angular.element(firstItem.get(0)).triggerHandler('click');
@@ -67,26 +67,7 @@ $(function() {
 </script>
 <body ng-app="sofaControlApp" class="hasTabBar">
 
-  <!-- SLIDEOUT -->
-  <section id="slideoutInner" class="hidden">
-    <div ng-controller="ConfigCtrl">
-      <h2>Services</h2>
-      <ul class="list mainnav">
-        <li data-show-article="sabnzbd" ng-repeat="config in sabnzbdConfigs" ng-click="switchToSABnzbdConfig(config)">
-          <h3><img src="/assets/images/sabnzbd.png" /> {{config.name}}</h3>
-        </li>
-        <li data-show-article="sickbeard" ng-repeat="config in sickBeardConfigs" ng-click="switchToSickBeardConfig(config)">
-          <h3><img src="/assets/images/sickbeard.png" /> {{config.name}}</h3>
-        </li>
-        <li data-show-article="couchpotato" ng-repeat="config in couchPotatoConfigs" ng-click="switchToCouchPotatoConfig(config)">
-          <h3><img src="/assets/images/couchpotato.png" /> {{config.name}}</h3>
-        </li>
-        <li data-show-article="settings">
-          <h3><i class="icon-cogs"></i> Settings</h3>
-        </li>
-      </ul>
-    </div>
-  </section>
+
 
   <!-- TABBARS -->
   <!-- Tabbar: SABnzbd -->
@@ -440,33 +421,112 @@ $(function() {
   <nav>
     <h1>Settings</h1>
   </nav>
-  <article id='settings' ng-controller="SettingsCtrl">
+  <article id='settings' ng-controller="ConfigCtrl">
     <section>
       <div id="settings_sabnzbd" class="tabbar-panel">
-        <h2>Settings</h2>
+        <div id="edit" ng-show="showForm == true">
+          <h2>Edit {{editServer.serverType.name}} server</h2>
+          <ul ui-implements='form' class='list'>
+            <li class='comp'>
+              <div>
+                <label for='name'>Name:</label>
+              </div>
+              <aside>
+                <input type="text" ng-model="editServer.name" name="name" autocapitalize="off" autocorrect="off" required />
+              </aside>
+            </li>
+            <li class='comp'>
+              <div>
+                <label for='hostname'>Hostname/IP:</label>
+              </div>
+              <aside>
+                <input type="text" ng-model="editServer.host" name="hostname" autocapitalize="off" autocorrect="off" required />
+              </aside>
+            </li>
+            <li class='comp'>
+              <div>
+                <label for='port'>Port:</label>
+              </div>
+              <aside>
+                <input type="text" ng-model="editServer.port" name="port" autocapitalize="off" autocorrect="off" required />
+              </aside>
+            </li>
+            <li class='comp'>
+              <div>
+                <label for='api'>API-KEY:</label>
+              </div>
+              <aside>
+                <input type="text" ng-model="editServer.apiKey" name="api" autocapitalize="off" autocorrect="off" required />
+              </aside>
+            </li>
+          </ul>
+          <a class="button" ng-click="remove()">Delete</a>
+          <a class='button action' ng-click="save()">Save</a>
+        </div>
 
-        <ul class='list'>
-          <li class='switched'>
-            <h3>asdf</h3>
-            <h4>asdf</h4>
-          </li>
-          <li class='switched'>
-            <h3>asdf</h3>
-            <h4>asdf</h4>
-          </li>
-          <li class='switched'>
-            <h3>asdf</h3>
-            <h4>asdf</h4>
-          </li>
-        </ul>
+        <div id="serverList" ng-show="showForm == false">
+          <h2><img src="/assets/images/sabnzbd.png" /> SABnzbd servers</h2>
+          <ul class='list' data-goto id="sabnzbdSettingsList">
+            <li class='nav' ng-repeat="server in sabnzbdConfigs" ng-click="edit(server, SERVERTYPE.SABNZBD)">
+              <h3>{{server.name}}</h3>
+              <h4>Host: <span class="u">{{server.host}}</span> on port: <span class="u">{{server.port}}</span></h4>
+            </li>
+          </ul>
+          <div>
+            <a class="button" ng-click="new(SERVERTYPE.SABNZBD)"><i class="icon-plus"></i> Add a new SABnzbd server</a>
+          </div>
+
+          <h2 class="no-margin-top"><img src="/assets/images/sickbeard.png" /> Sick Beard servers</h2>
+          <ul class='list' data-goto id="sickBeardSettingsList">
+            <li class='nav' ng-repeat="server in sickBeardConfigs" ng-click="edit(server, SERVERTYPE.SICKBEARD)">
+              <h3>{{server.name}}</h3>
+              <h4>Host: <span class="u">{{server.host}}</span> on port: <span class="u">{{server.port}}</span></h4>
+            </li>
+          </ul>
+          <div>
+            <a class="button" ng-click="new(SERVERTYPE.SICKBEARD)"><i class="icon-plus"></i> Add a new Sick Beard server</a>
+          </div>
+
+          <h2 class="no-margin-top"><img src="/assets/images/couchpotato.png" />CouchPotato servers</h2>
+          <ul class='list' data-goto id="couchPotatoSettingsList">
+            <li class='nav' ng-repeat="server in couchPotatoConfigs" ng-click="edit(server, SERVERTYPE.COUCHPOTATO)">
+              <h3>{{server.name}}</h3>
+              <h4>Host: <span class="u">{{server.host}}</span> on port: <span class="u">{{server.port}}</span></h4>
+            </li>
+          </ul>
+          <div>
+            <a class="button" ng-click="new(SERVERTYPE.COUCHPOTATO)"><i class="icon-plus"></i> Add a new CouchPotato server</a>
+          </div>
+        </div>
       </div>
     </section>
   </article>
 
+  <!-- SLIDEOUT -->
+  <div class="slide-out">
+    <section id="slideoutInner">
+      <div ng-controller="ConfigCtrl">
+        <h2>Services</h2>
+        <ul class="list mainnav">
+          <li data-show-article="sabnzbd" ng-repeat="config in sabnzbdConfigs" ng-click="switchToSABnzbdConfig(config)">
+            <h3><img src="/assets/images/sabnzbd.png" /> {{config.name}}</h3>
+          </li>
+          <li data-show-article="sickbeard" ng-repeat="config in sickBeardConfigs" ng-click="switchToSickBeardConfig(config)">
+            <h3><img src="/assets/images/sickbeard.png" /> {{config.name}}</h3>
+          </li>
+          <li data-show-article="couchpotato" ng-repeat="config in couchPotatoConfigs" ng-click="switchToCouchPotatoConfig(config)">
+            <h3><img src="/assets/images/couchpotato.png" /> {{config.name}}</h3>
+          </li>
+          <li data-show-article="settings">
+            <h3><i class="icon-cogs"></i> Settings</h3>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
   <!-- APP -->
   <script src="/assets/javascripts/sofa-control.js"></script>
-  <!-- CONFIG -->
-  <script src="/config.js"></script>
   <!-- DIRECTIVES -->
   <!-- SERVICES -->
   <script src="/assets/javascripts/services/sabnzbd.js"></script>
@@ -477,7 +537,6 @@ $(function() {
   <script src="/assets/javascripts/services/nzb-providers/nzbclub.js"></script>
   <!-- CONTROLLERS -->
   <script src="/assets/javascripts/controllers/config_controller.js"></script>
-  <script src="/assets/javascripts/controllers/settings_controller.js"></script>
   <script src="/assets/javascripts/controllers/sabnzbd_controller.js"></script>
   <script src="/assets/javascripts/controllers/sickbeard_controller.js"></script>
   <script src="/assets/javascripts/controllers/couchpotato_controller.js"></script>

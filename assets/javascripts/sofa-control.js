@@ -7,6 +7,9 @@ var sofaControlApp;
   sofaControlApp = angular.module('sofaControlApp', ['LocalStorageModule']);
   sofaControlApp.run(['$rootScope', function($rootScope) {
     $rootScope.state = null;
+    $rootScope.sabnzbdConfigs = [];
+    $rootScope.sickBeardConfigs = [];
+    $rootScope.couchPotatoConfigs = [];
 
     $rootScope.loading = function(show) {
       if(show && window.$chocolatechip('.popup').length === 0) {
