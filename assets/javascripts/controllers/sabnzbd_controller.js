@@ -134,7 +134,7 @@
         });
       };
 
-      setInterval(updateQueueAndStats, 1000);
+      setInterval(updateQueueAndStats, 2000);
       updateQueueAndStats();
     }
   ]);
