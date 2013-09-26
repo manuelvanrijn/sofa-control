@@ -1,8 +1,14 @@
 (function() {
   'use strict';
 
-  sofaControlApp.service('SABnzbdService', ['$http', 'SABNZBD', function($http, SABNZBD) {
-    this.url = 'http://' + SABNZBD.host + ':' + SABNZBD.port + '/api?apikey=' + SABNZBD.apiKey + '&output=json';
+  sofaControlApp.service('SABnzbdService', ['$http', '$rootScope', function($http, $rootScope) {
+    var _instance = this;
+
+    $rootScope.$on('setSABnzbdConfig', function(e, config) {
+      _instance.url = 'http://' + config.host + ':' + config.port + '/api?apikey=' + config.apiKey + '&output=json';
+    });
+
+    this.url = null;
 
     this.queue = function(start, limit) {
       start = start || 0;

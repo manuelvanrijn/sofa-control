@@ -19,3 +19,9 @@ a.button.back, a.button.backTo {
   margin: 10px auto;
   display: block;
 }
+.mainnav img {
+  vertical-align: middle;
+}
+nav > h1 {
+  z-index: 0;
+}

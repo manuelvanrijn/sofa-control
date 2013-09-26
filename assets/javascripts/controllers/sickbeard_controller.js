@@ -1,4 +1,3 @@
-var scope;
 (function() {
   'use strict';
 
@@ -14,7 +13,6 @@ var scope;
         season: null,
         seasonNumber: null
       };
-      scope = $scope;
 
       $scope.init = function() {
         $rootScope.state = 'sickbeard';
@@ -23,8 +21,18 @@ var scope;
         $('.tabbar:visible a.button:first').trigger('singletap');
       };
 
+      $scope.resetShowState = function() {
+        $scope.showState = {
+          show: null,
+          season: null,
+          seasonNumber: null
+        };
+        $scope.$apply();
+      };
+
       $scope.getHistory = function() {
         $rootScope.loading(true);
+        $scope.resetShowState();
         SickBeardService.history(25).then(function(data) {
           $scope.history = data;
         })['finally'](function() {
@@ -34,11 +42,7 @@ var scope;
 
       $scope.getShows = function() {
         $rootScope.loading(true);
-        $scope.showState = {
-          show: null,
-          season: null,
-          seasonNumber: null
-        };
+        $scope.resetShowState();
         $scope.seasons = [];
         $scope.shows = [];
         SickBeardService.shows().then(function(data) {
@@ -138,8 +142,12 @@ var scope;
       };
 
       $scope.getStats = function() {
+        $rootScope.loading(true);
+        $scope.resetShowState();
         SickBeardService.stats().then(function(data) {
           $scope.stats = data;
+        })['finally'](function() {
+          $rootScope.loading(false);
         });
       };
 

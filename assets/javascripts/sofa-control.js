@@ -3,7 +3,8 @@ var sofaControlApp;
 (function() {
   'use strict';
 
-  sofaControlApp = angular.module('sofaControlApp', []);
+  angular.module('LocalStorageModule').value('prefix', 'sofaControlApp');
+  sofaControlApp = angular.module('sofaControlApp', ['LocalStorageModule']);
   sofaControlApp.run(['$rootScope', function($rootScope) {
     $rootScope.state = null;
 

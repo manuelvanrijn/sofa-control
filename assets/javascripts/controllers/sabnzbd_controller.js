@@ -19,6 +19,7 @@
         $scope.providers.push(NZBClubService);
 
         $('.tabbar:visible a.button:first').trigger('singletap');
+        updateQueueAndStats();
       };
 
       $scope.prepareSearch = function() {
@@ -134,8 +135,7 @@
         });
       };
 
-      setInterval(updateQueueAndStats, 2000);
-      updateQueueAndStats();
+      //setInterval(updateQueueAndStats, 2000);
     }
   ]);
 }).call(this);

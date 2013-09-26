@@ -1,8 +1,14 @@
 (function() {
   'use strict';
 
-  sofaControlApp.service('CouchPotatoService', ['$http', 'COUCHPOTATO', function($http, COUCHPOTATO) {
-    this.url = 'http://' + COUCHPOTATO.host + ':' + COUCHPOTATO.port + '/api/' + COUCHPOTATO.apiKey + '/';
+  sofaControlApp.service('CouchPotatoService', ['$http', '$rootScope', function($http, $rootScope) {
+    var _instance = this;
+
+    $rootScope.$on('setCouchPotatoConfig', function(e, config) {
+      _instance.url = 'http://' + config.host + ':' + config.port + '/api/' + config.apiKey + '/';
+    });
+
+    this.url = null;
 
     this.available = function() {
       var url = this.url + 'app.available/';

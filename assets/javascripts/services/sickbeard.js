@@ -1,8 +1,14 @@
 (function() {
   'use strict';
 
-  sofaControlApp.service('SickBeardService', ['$http', 'SICKBEARD', function($http, SICKBEARD) {
-    this.url = 'http://' + SICKBEARD.host + ':' + SICKBEARD.port + '/api/' + SICKBEARD.apiKey + '/?cmd=';
+  sofaControlApp.service('SickBeardService', ['$http', '$rootScope', function($http, $rootScope) {
+    var _instance = this;
+
+    $rootScope.$on('setSickBeardConfig', function(e, config) {
+      _instance.url = 'http://' + config.host + ':' + config.port + '/api/' + config.apiKey + '/?cmd=';
+    });
+
+    this.url = null;
 
     this.stats = function() {
       var url = this.url + 'shows.stats';

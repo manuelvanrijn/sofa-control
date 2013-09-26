@@ -19,6 +19,7 @@
 
   <script src="/bower_components/jquery/jquery.min.js"></script>
   <script src="/bower_components/angular/angular.min.js"></script>
+  <script src="/bower_components/angular-local-storage/angular-local-storage.js"></script>
 
   <link rel="stylesheet" href="/assets/stylesheets/style.css">
 </head>
@@ -27,14 +28,13 @@ $(function() {
   (function(chui) {
     chui.isiOS = true;
     chui.UISlideout();
-    $('.slide-out > section').html($('#slideoutInner').html());
+    $('.slide-out > section').html($('#slideoutInner div').clone(true, true));
 
     //$('.segmented').UIPanelToggle('#toggle-panels',function(){$.noop;});
     if (chui.isiOS6) $('body').addClass('isiOS6');
     $('.tabbar-panel').addClass('hidden');
     $('.tabbar a.button').on('singletap', function(e) {
-      $('.tabbar-panel:not(".hidden")').addClass('hidden');
-
+      $('.tabbar-panel').addClass('hidden');
       $('.tabbar a.selected').removeClass('selected');
       $(this).addClass('selected');
 
@@ -47,13 +47,21 @@ $(function() {
         angular.element(document.getElementById(article)).scope()[init]()
       }
     });
+
     $('.mainnav li').on('singletap', function(e) {
-      var article = $(this).attr('data-show-article');
-      $('article.current').removeClass('current');
-      var articleContainer = $('#' + article).addClass('current');
-      angular.element(articleContainer.get(0)).scope().init();
+      var current_article = $('#' + $(this).attr('data-show-article'));
+      $('article, nav:not("#global-nav")').addClass('hidden').removeClass('current');
+      current_article.removeClass('hidden').addClass('current');
+      current_article.prev().removeClass('hidden');
+      angular.element(current_article.get(0)).scope().init();
     });
-    $('.mainnav li:first').trigger('singletap');
+
+    $('article, nav:not("#global-nav")').removeClass('current').addClass('hidden');
+
+    var firstItem = $('.mainnav li:first');
+    angular.element(firstItem.get(0)).triggerHandler('click');
+    firstItem.trigger('singletap');
+
   })(window.$chocolatechip);
 });
 </script>
@@ -61,21 +69,23 @@ $(function() {
 
   <!-- SLIDEOUT -->
   <section id="slideoutInner" class="hidden">
-    <h2>Services</h2>
-    <ul class="list mainnav">
-      <li data-show-article="sabnzbd">
-        <h3><i class="icon-cloud"></i> SABnzbd</h3>
-      </li>
-      <li data-show-article="sickbeard">
-        <h3><i class="icon-cloud"></i> Sick Beard</h3>
-      </li>
-      <li data-show-article="couchpotato">
-        <h3><i class="icon-cloud"></i> CouchPotato</h3>
-      </li>
-      <li data-show-article="settings">
-        <h3><i class="icon-cogs"></i> Settings</h3>
-      </li>
-    </ul>
+    <div ng-controller="ConfigCtrl">
+      <h2>Services</h2>
+      <ul class="list mainnav">
+        <li data-show-article="sabnzbd" ng-repeat="config in sabnzbdConfigs" ng-click="switchToSABnzbdConfig(config)">
+          <h3><img src="/assets/images/sabnzbd.png" /> {{config.name}}</h3>
+        </li>
+        <li data-show-article="sickbeard" ng-repeat="config in sickBeardConfigs" ng-click="switchToSickBeardConfig(config)">
+          <h3><img src="/assets/images/sickbeard.png" /> {{config.name}}</h3>
+        </li>
+        <li data-show-article="couchpotato" ng-repeat="config in couchPotatoConfigs" ng-click="switchToCouchPotatoConfig(config)">
+          <h3><img src="/assets/images/couchpotato.png" /> {{config.name}}</h3>
+        </li>
+        <li data-show-article="settings">
+          <h3><i class="icon-cogs"></i> Settings</h3>
+        </li>
+      </ul>
+    </div>
   </section>
 
   <!-- TABBARS -->
@@ -100,7 +110,7 @@ $(function() {
     <a class="button" data-panel="#sb_shows" data-article="sickbeard" data-init="getShows">
       <span class="icon"><i class="icon-youtube-play"></i></span> <label>Shows</label>
     </a>
-    <a class="button" data-panel="#sb_search" data-article="sickbeard">
+    <a class="button" data-panel="#sb_search" data-article="sickbeard" data-init="resetShowState">
       <span class="icon"><i class="icon-plus"></i></span> <label>Add show</label>
     </a>
     <a class="button" data-panel="#sb_history" data-article="sickbeard" data-init="getHistory">
@@ -113,8 +123,15 @@ $(function() {
 
   <!-- Tabbar: CouchPotato -->
   <div class="tabbar" ng-show="state == 'couchpotato'">
-    <a class="button" data-panel="#queue" data-article="couchpotato">
-      <span class="icon"></span> <label>couchpotato</label>
+    <a class="button" data-panel="#cp_wanted" data-article="couchpotato">
+      <span class="icon"></span> <label>Wanted</label>
+    </a>
+  </div>
+
+  <!-- Tabbar: Settings -->
+  <div class="tabbar" ng-show="state == 'settings'">
+    <a class="button" data-panel="#settings_sabnzbd" data-article="settings">
+      <span class="icon"></span> <label>settings</label>
     </a>
   </div>
 
@@ -406,21 +423,43 @@ $(function() {
   </div>
 
   <!-- CouchPotato Views -->
-  <nav>
-    <h1>CouchPotato</h1>
-  </nav>
-  <article id='couchpotato' ng-controller="CouchPotatoCtrl">
-    <section>
-      <h2>couchpotato</h2>
-    </section>
-  </article>
+  <div ng-controller="CouchPotatoCtrl">
+    <nav>
+      <h1>CouchPotato</h1>
+    </nav>
+    <article id='couchpotato'>
+      <section>
+        <div id="cp_wanted" class="tabbar-panel">
+          <h2>Wanted</h2>
+        </div>
+      </section>
+    </article>
+  </div>
 
+  <!-- Settings Views -->
   <nav>
     <h1>Settings</h1>
   </nav>
-  <article id='settings'>
+  <article id='settings' ng-controller="SettingsCtrl">
     <section>
-      <h2>settings</h2>
+      <div id="settings_sabnzbd" class="tabbar-panel">
+        <h2>Settings</h2>
+
+        <ul class='list'>
+          <li class='switched'>
+            <h3>asdf</h3>
+            <h4>asdf</h4>
+          </li>
+          <li class='switched'>
+            <h3>asdf</h3>
+            <h4>asdf</h4>
+          </li>
+          <li class='switched'>
+            <h3>asdf</h3>
+            <h4>asdf</h4>
+          </li>
+        </ul>
+      </div>
     </section>
   </article>
 
@@ -437,6 +476,8 @@ $(function() {
   <script src="/assets/javascripts/services/nzb-providers/nzbindex.js"></script>
   <script src="/assets/javascripts/services/nzb-providers/nzbclub.js"></script>
   <!-- CONTROLLERS -->
+  <script src="/assets/javascripts/controllers/config_controller.js"></script>
+  <script src="/assets/javascripts/controllers/settings_controller.js"></script>
   <script src="/assets/javascripts/controllers/sabnzbd_controller.js"></script>
   <script src="/assets/javascripts/controllers/sickbeard_controller.js"></script>
   <script src="/assets/javascripts/controllers/couchpotato_controller.js"></script>
