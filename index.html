@@ -280,6 +280,7 @@ $(function() {
           <!-- Seasons -->
           <div ng-show="showState.show != null && showState.season == null">
             <img ng-src="{{getBanner(showState.show)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" class="banner" />
+
             <h2>Seasons</h2>
             <ul class='list' role='list'>
               <li class='comp' ng-repeat="season in seasons" ng-click="setSeason($index, season)">
@@ -294,6 +295,8 @@ $(function() {
             </ul>
           </div>
           <div ng-show="showState.show != null && showState.season != null">
+            <img ng-src="{{getBanner(showState.show)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" class="banner" />
+
             <h2>Episodes <small>Season {{showState.seasonNumber}}</small></h2>
             <ul class='list' role='list'>
               <li class='comp' ng-repeat="episode in showState.season">
