@@ -73,20 +73,30 @@
 
       $scope.remove = function() {
         var type = $scope.editServer.serverType;
-        delete $scope.editServer.serverType;
-        delete $scope.editServer.originalConfig;
-        switch(type) {
-        case $scope.SERVERTYPE.SABNZBD:
-          $scope.removeSABnzbdConfig($scope.editServer);
-          break;
-        case $scope.SERVERTYPE.SICKBEARD:
-          $scope.removeSickBeardConfig($scope.editServer);
-          break;
-        case $scope.SERVERTYPE.COUCHPOTATO:
-          $scope.removeCouchPotatoConfig($scope.editServer);
-          break;
-        }
-        $scope.showForm = false;
+
+        window.$chocolatechip.UIPopup({
+          id: 'warning',
+          title: 'Confirm removal',
+          message: 'Are you sure you want to delete the "' + type.name + '" server "' + $scope.editServer.name + '"?',
+          cancelButton: 'Cancel',
+          continueButton: 'Delete',
+          callback: function() {
+            delete $scope.editServer.serverType;
+            delete $scope.editServer.originalConfig;
+            switch(type) {
+            case $scope.SERVERTYPE.SABNZBD:
+              $scope.removeSABnzbdConfig($scope.editServer);
+              break;
+            case $scope.SERVERTYPE.SICKBEARD:
+              $scope.removeSickBeardConfig($scope.editServer);
+              break;
+            case $scope.SERVERTYPE.COUCHPOTATO:
+              $scope.removeCouchPotatoConfig($scope.editServer);
+              break;
+            }
+            $scope.showForm = false;
+          }
+        });
       };
 
       $scope.switchToSABnzbdConfig = function(config) {

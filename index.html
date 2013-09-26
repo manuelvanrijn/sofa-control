@@ -107,7 +107,7 @@ $(function() {
   <!-- Tabbar: Settings -->
   <div class="tabbar" ng-show="state == 'settings'">
     <a class="button" data-panel="#settings_sabnzbd" data-article="settings">
-      <span class="icon"></span> <label>settings</label>
+      <span class="icon"><i class="icon-list-alt"></i></span> <label>Servers</label>
     </a>
   </div>
 
@@ -173,7 +173,7 @@ $(function() {
           </form>
 
           <ul class='list' ng-show="searchResult.entries.length > 0">
-            <li class='comp' ng-repeat="entry in searchResult.entries" ng-click="download(entry)">
+            <li class='comp' data-goto ng-repeat="entry in searchResult.entries" ng-click="download(entry)">
               <div>
                 <h3>{{entry.title}}</h3>
                 <h4>{{entry.contentSnippet}}</h4>
@@ -188,7 +188,7 @@ $(function() {
         <div id="history" class="tabbar-panel">
           <h2>History</h2>
           <ul class='list' ng-show="history.length > 0">
-            <li class='comp' ng-repeat="item in history">
+            <li class='comp' data-goto ng-repeat="item in history">
               <div>
                 <h3>{{item.name}}</h3>
                 <h4>Finished in: {{secondsToTime(item.download_time)}}</h4>
@@ -252,7 +252,7 @@ $(function() {
           <div ng-show="showState.show == null && showState.season == null">
             <h2>Continuing</h2>
             <ul class='list' ng-show="shows.length > 0">
-              <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()" ng-click="setShow(item)">
+              <li class='comp' data-goto ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()" ng-click="setShow(item)">
                 <aside>
                   <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
                 </aside>
@@ -270,7 +270,7 @@ $(function() {
 
             <h2>Other</h2>
             <ul class='list' ng-show="shows.length > 0">
-              <li class='comp' ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()" ng-click="setShow(item)">
+              <li class='comp' data-goto ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()" ng-click="setShow(item)">
                 <aside>
                   <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
                 </aside>
@@ -292,7 +292,7 @@ $(function() {
 
             <h2>Seasons</h2>
             <ul class='list' role='list'>
-              <li class='comp' ng-repeat="season in seasons" ng-click="setSeason($index, season)">
+              <li class='comp' data-goto ng-repeat="season in seasons" ng-click="setSeason($index, season)">
                 <div>
                   <h3>Season {{$index}}</h3>
                   <h4>{{numberOfEpisodes(season)}} episodes</h4>
@@ -308,7 +308,7 @@ $(function() {
 
             <h2>Episodes <small>Season {{showState.seasonNumber}}</small></h2>
             <ul class='list' role='list'>
-              <li class='comp' ng-repeat="episode in showState.season">
+              <li class='comp' data-goto ng-repeat="episode in showState.season">
                 <div>
                   <h3>{{$index + 1}}: {{episode.name}}</h3>
                   <h4>{{episode.airdate}} - {{episode.quality}}</h4>
@@ -340,7 +340,7 @@ $(function() {
           <div ng-show="searchResult.results.length > 0">
             <h2>Found ({{searchResult.results.length}}) results</h2>
             <ul class='list'>
-              <li class='comp' ng-repeat="entry in searchResult.results" ng-click="showAddShowOptions(entry)">
+              <li class='comp' data-goto ng-repeat="entry in searchResult.results" ng-click="showAddShowOptions(entry)">
                 <aside>
                   <img ng-src="{{getPoster(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
                 </aside>
@@ -377,7 +377,7 @@ $(function() {
           <h2>History</h2>
 
           <ul class='list' ng-show="history.length > 0">
-            <li class='comp' ng-repeat="item in history">
+            <li class='comp' data-goto ng-repeat="item in history">
               <aside>
                 <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
               </aside>
@@ -476,14 +476,15 @@ $(function() {
               </aside>
             </li>
           </ul>
-          <a class="button" ng-click="remove()">Delete</a>
           <a class='button action' ng-click="save()">Save</a>
+          <a class="button" ng-click="showForm = false">Cancel</a>
+          <a class="button" ng-click="remove()">Delete</a>
         </div>
 
         <div id="serverList" ng-show="showForm == false">
           <h2><img src="/assets/images/sabnzbd.png" /> SABnzbd servers</h2>
           <ul class='list' data-goto id="sabnzbdSettingsList">
-            <li class='nav' ng-repeat="server in sabnzbdConfigs" ng-click="edit(server, SERVERTYPE.SABNZBD)">
+            <li class='nav' data-goto ng-repeat="server in sabnzbdConfigs" ng-click="edit(server, SERVERTYPE.SABNZBD)">
               <h3>{{server.name}}</h3>
               <h4>Host: <span class="u">{{server.host}}</span> on port: <span class="u">{{server.port}}</span></h4>
             </li>
@@ -494,7 +495,7 @@ $(function() {
 
           <h2 class="no-margin-top"><img src="/assets/images/sickbeard.png" /> Sick Beard servers</h2>
           <ul class='list' data-goto id="sickBeardSettingsList">
-            <li class='nav' ng-repeat="server in sickBeardConfigs" ng-click="edit(server, SERVERTYPE.SICKBEARD)">
+            <li class='nav' data-goto ng-repeat="server in sickBeardConfigs" ng-click="edit(server, SERVERTYPE.SICKBEARD)">
               <h3>{{server.name}}</h3>
               <h4>Host: <span class="u">{{server.host}}</span> on port: <span class="u">{{server.port}}</span></h4>
             </li>
@@ -505,7 +506,7 @@ $(function() {
 
           <h2 class="no-margin-top"><img src="/assets/images/couchpotato.png" />CouchPotato servers</h2>
           <ul class='list' data-goto id="couchPotatoSettingsList">
-            <li class='nav' ng-repeat="server in couchPotatoConfigs" ng-click="edit(server, SERVERTYPE.COUCHPOTATO)">
+            <li class='nav' data-goto ng-repeat="server in couchPotatoConfigs" ng-click="edit(server, SERVERTYPE.COUCHPOTATO)">
               <h3>{{server.name}}</h3>
               <h4>Host: <span class="u">{{server.host}}</span> on port: <span class="u">{{server.port}}</span></h4>
             </li>
