@@ -1,3 +1,4 @@
+var scope;
 (function() {
   'use strict';
 
@@ -8,8 +9,12 @@
       $scope.searchResult = {};
       $scope.stats = {};
       $scope.seasons = [];
-      $scope.currentShow = null;
-      $scope.currentSeason = null;
+      $scope.showState = {
+        show: null,
+        season: null,
+        seasonNumber: null
+      };
+      scope = $scope;
 
       $scope.init = function() {
         $rootScope.state = 'sickbeard';
@@ -29,6 +34,12 @@
 
       $scope.getShows = function() {
         $rootScope.loading(true);
+        $scope.showState = {
+          show: null,
+          season: null,
+          seasonNumber: null
+        };
+        $scope.seasons = [];
         $scope.shows = [];
         SickBeardService.shows().then(function(data) {
           $scope.shows = [];
@@ -43,16 +54,18 @@
       };
 
       $scope.getPoster = function(show) {
-        if(show === null)
+        if(show === null) {
           return;
+        }
         return 'http://thetvdb.com/banners/posters/' + show.tvdbid + '-1.jpg';
       };
 
       $scope.getBanner = function(show) {
-        if(show === null)
+        if(show === null) {
           return;
+        }
         return 'http://thetvdb.com/banners/graphical/' + show.tvdbid + '-g2.jpg';
-      }
+      };
 
       $scope.search = function(query) {
         $rootScope.loading(true);
@@ -73,7 +86,7 @@
           window.$chocolatechip.UIPopup({
             id: 'showAddedPopUp',
             title: 'New show',
-            message: 'ok', //data.message,
+            message: data.message,
             cancelButton: false,
             continueButton: 'OK',
             callback: function() {
@@ -84,22 +97,15 @@
           });
         });
       };
-      $scope.goto = function(id, show) {
-        $scope.currentShow = show;
-        $("article#sickbeard section").addClass('hidden')
-        $("article#sickbeard section" + id).removeClass('hidden');
 
-        if($scope.currentShow !== null) {
-          $scope.getSeasons($scope.currentShow);
-        }
-      };
-
-      $scope.getSeasons = function(show) {
+      $scope.setShow = function(show) {
+        $scope.showState.show = show;
         $scope.seasons = [];
-        $scope.currentSeason = null;
+        if(show === null) {
+          return;
+        }
 
         $rootScope.loading(true);
-        window.$chocolatechip.UIHideSheet();
         SickBeardService.seasons(show.tvdbid).then(function(data) {
           $scope.seasons = data;
         })['finally'](function() {
@@ -107,14 +113,15 @@
         });
       };
 
-      $scope.setCurrentSeason = function(season) {
-        $scope.currentSeason = season;
+      $scope.setSeason = function(number, season) {
+        $scope.showState.season = season;
+        $scope.showState.seasonNumber = number;
       };
 
       $scope.numberOfEpisodes = function(season) {
         // -1 for the angular $$hashkey property
         return Object.keys(season).length - 1;
-      }
+      };
 
       $scope.showAddShowOptions = function(show) {
         window.$chocolatechip.UISheet({

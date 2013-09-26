@@ -24,7 +24,7 @@
         $scope.providerIndex = 0;
         $scope.query = '';
         $scope.searchResult = {};
-        $("#providerSelect").get(0).selectedIndex = 1;
+        $('#providerSelect').get(0).selectedIndex = 1;
       };
 
       $scope.getHistory = function() {
@@ -40,9 +40,9 @@
       };
 
       $scope.secondsToTime = function(totalSeconds) {
-        var seconds = ('0' + parseInt(totalSeconds % 60)).slice(-2)
-        var minutes = ('0' + parseInt((totalSeconds / 60) % 60)).slice(-2);
-        var hours = ('0' + parseInt(totalSeconds / 3600)).slice(-2);
+        var seconds = ('0' + parseInt(totalSeconds % 60, 10)).slice(-2);
+        var minutes = ('0' + parseInt((totalSeconds / 60) % 60, 10)).slice(-2);
+        var hours = ('0' + parseInt(totalSeconds / 3600, 10)).slice(-2);
         return hours + ':' + minutes + '.' + seconds;
       };
 
