@@ -12,8 +12,24 @@
 
     this.available = function() {
       var url = this.url + 'app.available/';
-      return $http.jsonp(url + '?callback_func=JSON_CALLBACK').then(function(resp) {
-        return resp.data;
+      return $http.jsonp(url + '?callback_func=JSON_CALLBACK', { timeout: 3000 }).then(function(resp) {
+        if(resp.data.success === true) {
+          return {
+            status: true,
+            error: ''
+          };
+        }
+        else {
+          return {
+            status: false,
+            error: 'something went wrong'
+          };
+        }
+      }, function() {
+        return {
+          status: false,
+          error: 'Error trying to connect'
+        };
       });
     };
 

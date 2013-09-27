@@ -7,7 +7,20 @@
         $rootScope.state = 'couchpotato';
         $rootScope.$apply();
 
-        $('.tabbar:visible a.button:first').trigger('singletap');
+        CouchPotatoService.available().then(function(data) {
+          var $elms = $('#tabbar-couchpotato, article#couchpotato .tabbar-panel:first');
+          if(data.status === false) {
+            $elms.addClass('hidden');
+            $('#couchpotato-error').removeClass('hidden');
+            $scope.error = data.error;
+          }
+          else {
+            $elms.removeClass('hidden');
+            $('#couchpotato-error').addClass('hidden');
+            $scope.error = null;
+          }
+          $('.tabbar:visible a.button:first').trigger('singletap');
+        });
       };
     }
   ]);

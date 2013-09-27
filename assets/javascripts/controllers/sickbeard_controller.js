@@ -20,7 +20,6 @@
         $rootScope.$apply();
 
         SickBeardService.available().then(function(data) {
-          console.log(data);
           var $elms = $('#tabbar-sickbeard, article#sickbeard .tabbar-panel:first');
           if(data.status === false) {
             $elms.addClass('hidden');
@@ -42,7 +41,9 @@
           season: null,
           seasonNumber: null
         };
-        $scope.$apply();
+        if(!$scope.$$phase) {
+          $scope.$apply();
+        }
       };
 
       $scope.getHistory = function() {

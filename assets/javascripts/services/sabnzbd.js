@@ -21,7 +21,10 @@
           };
         }
         else {
-          return resp.data;
+          return {
+            status: resp.data.status,
+            error: resp.data.error
+          };
         }
       }, function() {
         return {
