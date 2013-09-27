@@ -8,12 +8,12 @@ Sofa Control:
 
   Features:
     ✔ SABnzbd queue delete, pause, resume @done (13-09-26 23:18)
-    ☐ SABnzbd queue priority
     ✔ SABnzbd pause/resume server @done (13-09-26 23:33)
     ✔ SickBeard Seasons/Episodes banner width @done (13-09-27 11:44)
-    ☐ CP wanted list
-    ☐ CP search/add
+    ✔ CP wanted list @done (13-09-27 17:41)
+    ✔ CP search/add @done (13-09-27 17:41)
     ✔ Check if services are available @done (13-09-27 11:37)
+    ☐ SABnzbd queue priority
 
   SABnzbd:
     API DOC: http://wiki.sabnzbd.org/api
