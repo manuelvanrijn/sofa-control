@@ -10,6 +10,30 @@
 
     this.url = null;
 
+    this.available = function() {
+      // using the get_config call to check if app is online
+      var url = this.url + 'sb.ping';
+      return $http.jsonp(url + '&callback=JSON_CALLBACK', { timeout: 3000 }).then(function(resp) {
+        if(resp.data.result === "success") {
+          return {
+            status: true,
+            error: ''
+          };
+        }
+        else {
+          return {
+            status: false,
+            error: resp.data.message
+          };
+        }
+      }, function() {
+        return {
+          status: false,
+          error: 'Error trying to connect'
+        };
+      });
+    };
+
     this.stats = function() {
       var url = this.url + 'shows.stats';
       return $http.jsonp(url + '&callback=JSON_CALLBACK').then(function(resp) {

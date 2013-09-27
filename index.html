@@ -252,6 +252,10 @@ $(function() {
     </nav>
     <article id='sickbeard'>
       <section id="sickbeard_main">
+        <div id="sickbeard-error" class="hidden error">
+          <h1><i class="icon-frown"></i> Oeps...</h1>
+          <h2>{{error}}</h2>
+        </div>
         <div id="sb_shows" class="tabbar-panel">
           <div ng-show="showState.show == null && showState.season == null">
             <h2>Continuing</h2>

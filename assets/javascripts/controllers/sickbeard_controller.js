@@ -3,6 +3,7 @@
 
   sofaControlApp.controller('SickBeardCtrl', ['$scope', '$rootScope', 'SickBeardService',
     function($scope, $rootScope, SickBeardService) {
+      $scope.error = null;
       $scope.history = [];
       $scope.shows = [];
       $scope.searchResult = {};
@@ -18,7 +19,21 @@
         $rootScope.state = 'sickbeard';
         $rootScope.$apply();
 
-        $('.tabbar:visible a.button:first').trigger('singletap');
+        SickBeardService.available().then(function(data) {
+          console.log(data);
+          var $elms = $('#tabbar-sickbeard, article#sickbeard .tabbar-panel:first');
+          if(data.status === false) {
+            $elms.addClass('hidden');
+            $('#sickbeard-error').removeClass('hidden');
+            $scope.error = data.error;
+          }
+          else {
+            $elms.removeClass('hidden');
+            $('#sickbeard-error').addClass('hidden');
+            $scope.error = null;
+          }
+          $('.tabbar:visible a.button:first').trigger('singletap');
+        });
       };
 
       $scope.resetShowState = function() {

@@ -40,5 +40,7 @@ h2.no-margin-top {
 .error h2 {
   font-size: 24pt;
   text-align: center;
-  overflow: initial;
+  overflow: visible;
+  white-space: normal;
+  line-height: 25pt;
 }

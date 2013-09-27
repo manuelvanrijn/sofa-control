@@ -13,7 +13,7 @@
     this.available = function() {
       // using the get_config call to check if app is online
       var url = this.url + '&mode=get_config';
-      return $http.jsonp(url + '&callback=JSON_CALLBACK').then(function(resp) {
+      return $http.jsonp(url + '&callback=JSON_CALLBACK', { timeout: 3000 }).then(function(resp) {
         if(resp.data.status === undefined) {
           return {
             status: true,
