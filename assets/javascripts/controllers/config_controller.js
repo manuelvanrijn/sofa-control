@@ -23,7 +23,7 @@
         $rootScope.state = 'settings';
         $rootScope.$apply();
 
-        $('.tabbar:visible a.button:first').trigger('singletap');
+        $('#tabbar-settings a.button:first').trigger('singletap');
       };
 
       $scope.edit = function(server, type) {

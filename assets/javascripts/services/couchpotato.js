@@ -6,6 +6,14 @@
 
     $rootScope.$on('setCouchPotatoConfig', function(e, config) {
       _instance.url = 'http://' + config.host + ':' + config.port + '/api/' + config.apiKey + '/';
+      _instance.available().then(function(data) {
+        if(data.status === false) {
+          $rootScope.$broadcast('CouchPotatoService.connectionError', data);
+        }
+        else {
+          $rootScope.$broadcast('CouchPotatoService.connected', data);
+        }
+      });
     });
 
     this.url = null;

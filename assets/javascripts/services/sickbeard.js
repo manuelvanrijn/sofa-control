@@ -6,6 +6,14 @@
 
     $rootScope.$on('setSickBeardConfig', function(e, config) {
       _instance.url = 'http://' + config.host + ':' + config.port + '/api/' + config.apiKey + '/?cmd=';
+      _instance.available().then(function(data) {
+        if(data.status === false) {
+          $rootScope.$broadcast('SickBeardService.connectionError', data);
+        }
+        else {
+          $rootScope.$broadcast('SickBeardService.connected', data);
+        }
+      });
     });
 
     this.url = null;

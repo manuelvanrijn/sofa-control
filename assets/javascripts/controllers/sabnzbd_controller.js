@@ -10,6 +10,21 @@
       $scope.stats = {};
       $scope.providerIndex = 0;
 
+      var $elms = $('#tabbar-sabnzbd, article#sabnzbd .tabbar-panel:first');
+      $rootScope.$on('SABnzbdService.connectionError', function(e, result) {
+        $elms.addClass('hidden');
+        $('#sabnzbd-error').removeClass('hidden');
+        $scope.error = result.error;
+      });
+
+      $rootScope.$on('SABnzbdService.connected', function(e, result) {
+        $elms.removeClass('hidden');
+        $('#sabnzbd-error').addClass('hidden');
+        $scope.error = null;
+        updateQueueAndStats();
+        $('#tabbar-sabnzbd a.button:first').trigger('singletap');
+      });
+
       $scope.init = function() {
         $rootScope.state = 'sabnzbd';
         $rootScope.$apply();
@@ -18,22 +33,6 @@
         $scope.providers = [];
         $scope.providers.push(NZBIndexService);
         $scope.providers.push(NZBClubService);
-
-        SABnzbdService.available().then(function(data) {
-          var $elms = $('#tabbar-sabnzbd, article#sabnzbd .tabbar-panel:first');
-          if(data.status === false) {
-            $elms.addClass('hidden');
-            $('#sabnzbd-error').removeClass('hidden');
-            $scope.error = data.error;
-          }
-          else {
-            $elms.removeClass('hidden');
-            $('#sabnzbd-error').addClass('hidden');
-            $scope.error = null;
-            updateQueueAndStats();
-          }
-          $('.tabbar:visible a.button:first').trigger('singletap');
-        });
       };
 
       $scope.showQueueOptions = function(task) {

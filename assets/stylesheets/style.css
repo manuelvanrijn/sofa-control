@@ -3,6 +3,9 @@ article > section {
   top: -15px;
   padding-top: 0;
 }
+body.hasTabBar article#settings {
+  bottom: 0;
+}
 nav.current {
   z-index: 100;
 }
@@ -17,6 +20,7 @@ nav.current {
 }
 a.button.back, a.button.backTo {
   padding: 8px 0 8px 40px!important;
+  z-index: 100000;
 }
 .banner {
   margin: 15px auto 0;

@@ -15,24 +15,23 @@
         seasonNumber: null
       };
 
+      var $elms = $('#tabbar-sickbeard, article#sickbeard .tabbar-panel:first');
+      $rootScope.$on('SickBeardService.connectionError', function(e, result) {
+        $elms.addClass('hidden');
+        $('#sickbeard-error').removeClass('hidden');
+        $scope.error = result.error;
+      });
+
+      $rootScope.$on('SickBeardService.connected', function(e, result) {
+        $elms.removeClass('hidden');
+        $('#sickbeard-error').addClass('hidden');
+        $scope.error = null;
+        $('#tabbar-sickbeard a.button:first').trigger('singletap');
+      });
+
       $scope.init = function() {
         $rootScope.state = 'sickbeard';
         $rootScope.$apply();
-
-        SickBeardService.available().then(function(data) {
-          var $elms = $('#tabbar-sickbeard, article#sickbeard .tabbar-panel:first');
-          if(data.status === false) {
-            $elms.addClass('hidden');
-            $('#sickbeard-error').removeClass('hidden');
-            $scope.error = data.error;
-          }
-          else {
-            $elms.removeClass('hidden');
-            $('#sickbeard-error').addClass('hidden');
-            $scope.error = null;
-          }
-          $('.tabbar:visible a.button:first').trigger('singletap');
-        });
       };
 
       $scope.resetShowState = function() {

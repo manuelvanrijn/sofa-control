@@ -6,6 +6,14 @@
 
     $rootScope.$on('setSABnzbdConfig', function(e, config) {
       _instance.url = 'http://' + config.host + ':' + config.port + '/api?apikey=' + config.apiKey + '&output=json';
+      _instance.available().then(function(data) {
+        if(data.status === false) {
+          $rootScope.$broadcast('SABnzbdService.connectionError', data);
+        }
+        else {
+          $rootScope.$broadcast('SABnzbdService.connected', data);
+        }
+      });
     });
 
     this.url = null;
