@@ -16,11 +16,14 @@ nav.current {
   z-index: 999;
 }
 a.button.back, a.button.backTo {
-  padding-left: 40px;
+  padding: 8px 0 8px 40px!important;
 }
 .banner {
-  margin: 10px auto;
+  margin: 15px auto 0;
   display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 80px;
 }
 .mainnav img {
   vertical-align: middle;
