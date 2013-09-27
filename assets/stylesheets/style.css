@@ -47,3 +47,12 @@ h2.no-margin-top {
   white-space: normal;
   line-height: 25pt;
 }
+
+#couchpotato .list aside img, #couchpotato .list aside small {
+  margin: 0 auto;
+  display: block;
+}
+
+#couchpotato .list aside small {
+  display: none;
+}

@@ -50,20 +50,30 @@
     this.search = function(query) {
       var url = this.url + 'movie.search/';
       return $http.jsonp(url + '?q=' + query + '&callback_func=JSON_CALLBACK').then(function(resp) {
-        return resp.data;
+        return resp.data.movies;
       });
     };
 
-    this.movies = function() {
+    this.movies = function(status) {
+      status = status || "active,done";
       var url = this.url + 'movie.list/';
-      return $http.jsonp(url + '?callback_func=JSON_CALLBACK').then(function(resp) {
-        return resp.data;
+      return $http.jsonp(url + '?status=' + status + '&callback_func=JSON_CALLBACK').then(function(resp) {
+        return resp.data.movies;
       });
     };
 
     this.addMovie = function(profileId, identifier, title) {
-      var url = this.url + 'movie.list/';
+      var url = this.url + 'movie.add/';
       return $http.jsonp(url + '?profile_id=' + profileId + '&identifier=' + identifier + '&title=' + title + '&callback_func=JSON_CALLBACK').then(function(resp) {
+        return resp.data;
+      });
+    };
+
+    this.removeMovie = function(id) {
+      //TODO: at this point we only delete from the wanted list.
+      var deleteFrom = 'wanted';
+      var url = this.url + 'movie.delete/';
+      return $http.jsonp(url + '?id=' + id + '&delete_from=' + deleteFrom + '&callback_func=JSON_CALLBACK').then(function(resp) {
         return resp.data;
       });
     };
@@ -71,7 +81,7 @@
     this.profiles = function() {
       var url = this.url + 'profile.list/';
       return $http.jsonp(url + '?callback_func=JSON_CALLBACK').then(function(resp) {
-        return resp.data;
+        return resp.data.list;
       });
     };
 

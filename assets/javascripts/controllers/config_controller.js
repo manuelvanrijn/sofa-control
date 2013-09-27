@@ -16,6 +16,7 @@
         $scope.couchPotatoConfigs = localStorageService.get('couchPotatoConfigs');
       });
 
+      //localStorageService.clearAll();
       $rootScope.$broadcast('updateConfigs');
 
       $scope.init = function() {

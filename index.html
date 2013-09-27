@@ -99,8 +99,14 @@ $(function() {
 
   <!-- Tabbar: CouchPotato -->
   <div class="tabbar" id="tabbar-couchpotato" ng-show="state == 'couchpotato'">
-    <a class="button" data-panel="#cp_wanted" data-article="couchpotato">
-      <span class="icon"></span> <label>Wanted</label>
+    <a class="button" data-panel="#cp_wanted" data-article="couchpotato" data-init="getWanted">
+      <span class="icon"><i class="icon-eye-open"></i></span> <label>Wanted</label>
+    </a>
+    <a class="button" data-panel="#cp_search" data-article="couchpotato">
+      <span class="icon"><i class="icon-plus"></i></span> <label>Add movie</label>
+    </a>
+    <a class="button" data-panel="#cp_downloaded" data-article="couchpotato" data-init="getDownloaded">
+      <span class="icon"><i class="icon-hdd"></i></span> <label>Downloaded</label>
     </a>
   </div>
 
@@ -262,7 +268,7 @@ $(function() {
             <ul class='list' ng-show="shows.length > 0">
               <li class='comp' data-goto ng-repeat="item in shows | orderBy:'show_name' | filter:statusContinuing()" ng-click="setShow(item)">
                 <aside>
-                  <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                  <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" />
                 </aside>
                 <div>
                   <!--  -->
@@ -280,7 +286,7 @@ $(function() {
             <ul class='list' ng-show="shows.length > 0">
               <li class='comp' data-goto ng-repeat="item in shows | orderBy:'show_name' | filter:statusNotContinuing()" ng-click="setShow(item)">
                 <aside>
-                  <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                  <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" />
                 </aside>
                 <div>
                   <!--  -->
@@ -296,7 +302,7 @@ $(function() {
           </div>
           <!-- Seasons -->
           <div ng-show="showState.show != null && showState.season == null">
-            <img ng-src="{{getBanner(showState.show)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" class="banner" />
+            <img ng-src="{{getBanner(showState.show)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" class="banner" />
 
             <h2>Seasons</h2>
             <ul class='list' role='list'>
@@ -312,7 +318,7 @@ $(function() {
             </ul>
           </div>
           <div ng-show="showState.show != null && showState.season != null">
-            <img ng-src="{{getBanner(showState.show)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" class="banner" />
+            <img ng-src="{{getBanner(showState.show)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" class="banner" />
 
             <h2>Episodes <small>Season {{showState.seasonNumber}}</small></h2>
             <ul class='list' role='list'>
@@ -350,7 +356,7 @@ $(function() {
             <ul class='list'>
               <li class='comp' data-goto ng-repeat="entry in searchResult.results" ng-click="showAddShowOptions(entry)">
                 <aside>
-                  <img ng-src="{{getPoster(entry)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                  <img ng-src="{{getPoster(entry)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" />
                 </aside>
                 <div>
                   <h3>{{entry.name}}</h3>
@@ -387,7 +393,7 @@ $(function() {
           <ul class='list' ng-show="history.length > 0">
             <li class='comp' data-goto ng-repeat="item in history">
               <aside>
-                <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='http://jmundorf.edublogs.org/files/2010/09/question-mark.jpeg'" />
+                <img ng-src="{{getPoster(item)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" />
               </aside>
               <div>
                 <h3>{{item.show_name}} Season: {{item.season}} Episode: {{item.episode}}</h3>
@@ -439,7 +445,93 @@ $(function() {
           <h2>{{error}}</h2>
         </div>
         <div id="cp_wanted" class="tabbar-panel">
-          <h2>Wanted</h2>
+          <h2>Wanted <small>({{wantedMovies.length}} items)</small></h2>
+          <ul class='list' ng-show="wantedMovies.length > 0">
+            <li class='comp' ng-repeat="movie in wantedMovies" data-goto ng-click="wantedOptions(movie)">
+              <aside>
+                <img ng-src="{{getPoster(movie)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" />
+                <br />
+                <small>{{movie.Released}}</small>
+              </aside>
+              <div>
+                <h3>{{movie.Title}} ({{movie.Year}})</h3>
+                <p>{{movie.Plot}}</p>
+              </div>
+              <aside>
+                <span class='nav'></span>
+              </aside>
+            </li>
+          </ul>
+
+          <div id="wantedMovieOptions" class="hidden">
+            <ul class='list'>
+              <li>
+                <a class='button' ng-click="deleteWantedMovie()">Delete</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="cp_search" class="tabbar-panel">
+          <h2>Search</h2>
+          <form ng-submit="search(query)">
+            <ul ui-implements='form' class='list'>
+              <li class='comp'>
+                <div>
+                  <label for='query'>Search query:</label>
+                </div>
+                <aside>
+                  <input id="query" type="text" ng-model="query" autocapitalize="off" autocorrect="off" required>
+                </aside>
+              </li>
+            </ul>
+          </form>
+
+          <div ng-show="searchResults.length > 0">
+            <h2>Found ({{searchResults.length}}) results</h2>
+            <ul class='list'>
+              <li class='comp' data-goto ng-repeat="movie in searchResults" ng-click="download(movie)">
+                <aside>
+                  <img ng-src="{{getPoster(movie)}}" height="80px" onerror="this.src='/assets/images/poster-unknown.png'" />
+                </aside>
+                <div>
+                  <h3>{{movie.titles[0]}} ({{movie.year}})</h3>
+                  <p>
+                    {{movie.plot}}<br />
+                    <strong>Released: </strong>{{movie.released}}
+                  </p>
+                </div>
+                <aside>
+                  <span class='nav'></span>
+                </aside>
+              </li>
+            </ul>
+          </div>
+
+          <div id="profileOptions" class="hidden">
+            <ul class='list'>
+              <li ng-repeat="profile in profiles" data-id="{{profile.id}}">
+                <a class='button'>{{profile.label}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="cp_downloaded" class="tabbar-panel">
+          <h2>Downloaded <small>({{downloadedMovies.length}} items)</small></h2>
+          <ul class='list' ng-show="downloadedMovies.length > 0">
+            <li class='comp' ng-repeat="movie in downloadedMovies">
+              <aside>
+                <img ng-src="{{getPoster(movie)}}" height="80px" />
+                <br />
+                <small>{{movie.Released}}</small>
+              </aside>
+              <div>
+                <h3>{{movie.Title}} ({{movie.Year}})</h3>
+                <p>{{movie.Plot}}</p>
+              </div>
+            </li>
+          </ul>
         </div>
       </section>
     </article>
@@ -516,7 +608,7 @@ $(function() {
             <a class="button" ng-click="new(SERVERTYPE.SICKBEARD)"><i class="icon-plus"></i> Add a new Sick Beard server</a>
           </div>
 
-          <h2 class="no-margin-top"><img src="/assets/images/couchpotato.png" />CouchPotato servers</h2>
+          <h2 class="no-margin-top"><img src="/assets/images/couchpotato.png" /> CouchPotato servers</h2>
           <ul class='list' data-goto id="couchPotatoSettingsList">
             <li class='nav' data-goto ng-repeat="server in couchPotatoConfigs" ng-click="edit(server, SERVERTYPE.COUCHPOTATO)">
               <h3>{{server.name}}</h3>
@@ -561,6 +653,7 @@ $(function() {
   <script src="/assets/javascripts/services/sabnzbd.js"></script>
   <script src="/assets/javascripts/services/sickbeard.js"></script>
   <script src="/assets/javascripts/services/couchpotato.js"></script>
+  <script src="/assets/javascripts/services/omdb.js"></script>
   <!-- SERVICES: NZB Providers -->
   <script src="/assets/javascripts/services/nzb-providers/nzbindex.js"></script>
   <script src="/assets/javascripts/services/nzb-providers/nzbclub.js"></script>

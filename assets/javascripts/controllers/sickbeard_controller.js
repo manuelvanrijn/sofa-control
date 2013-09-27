@@ -100,6 +100,7 @@
       $scope.addShow = function(show, status) {
         $rootScope.loading(true);
         window.$chocolatechip.UIHideSheet();
+        $('#addShowSheet').remove();
         SickBeardService.addShow(show.tvdbid, status).then(function(data) {
           $rootScope.loading(false);
 

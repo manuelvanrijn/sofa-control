@@ -56,6 +56,7 @@
       $scope.resumeTask = function() {
         SABnzbdService.resumeTask($scope.currentTask.nzo_id).then(function(data) {
           window.$chocolatechip.UIHideSheet();
+          $('#queueSheet').remove();
         });
 
       };
@@ -63,6 +64,7 @@
       $scope.pauseTask = function() {
         SABnzbdService.pauseTask($scope.currentTask.nzo_id).then(function(data) {
           window.$chocolatechip.UIHideSheet();
+          $('#queueSheet').remove();
         });
       };
 
@@ -75,6 +77,7 @@
           continueButton: 'Delete',
           callback: function() {
             window.$chocolatechip.UIHideSheet();
+            $('#queueSheet').remove();
             SABnzbdService.deleteTask($scope.currentTask.nzo_id);
           }
         });
@@ -131,7 +134,7 @@
           $rootScope.loading(false);
         }, function(error) {
           window.$chocolatechip.UIPopup({
-            id: 'showAddesearchErrordPopUp',
+            id: 'showSearchErrorPopUp',
             title: 'Search error',
             message: error.responseDetails,
             cancelButton: false,

@@ -1,6 +1,7 @@
 Sofa Control:
   BUGS:
     ✔ When adding/removing a service the slide out navigation doesn't work anymore @done (13-09-26 18:46)
+    ☐ When adding a server on IOS the first time and selecing it in the slideout results in a connection error...?
 
   Features:
     ✔ SABnzbd queue delete, pause, resume @done (13-09-26 23:18)
