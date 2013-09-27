@@ -8,9 +8,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Sofa Control</title>
 
-  <link rel="stylesheet" href="/bower_components/chocolatechip-ui/chui/chui.ios-3.0.2.css">
-  <script src="/bower_components/chocolatechip-ui/chui/chocolatechip-3.0.2.js"></script>
-  <script src="/bower_components/chocolatechip-ui/chui/chui-3.0.2.js"></script>
+  <link rel="stylesheet" href="/bower_components/chocolatechip-ui/chui/chui.ios-3.0.4.css">
+  <script src="/bower_components/chocolatechip-ui/chui/chocolatechip-3.0.4.js"></script>
+  <script src="/bower_components/chocolatechip-ui/chui/chui-3.0.4.js"></script>
 
   <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css">
   <!--[if IE 7]>
@@ -66,7 +66,7 @@ $(function() {
 <body ng-app="sofaControlApp" class="hasTabBar">
   <!-- TABBARS -->
   <!-- Tabbar: SABnzbd -->
-  <div class="tabbar" ng-show="state == 'sabnzbd'">
+  <div class="tabbar" id="tabbar-sabnzbd" ng-show="state == 'sabnzbd'">
     <a class="button" data-panel="#queue" data-article="sabnzbd">
       <span class="icon"><i class="icon-tasks"></i></span> <label>Queue</label>
     </a>
@@ -82,7 +82,7 @@ $(function() {
   </div>
 
   <!-- Tabbar: Sick Beard -->
-  <div class="tabbar" ng-show="state == 'sickbeard'">
+  <div class="tabbar" id="tabbar-sickbeard" ng-show="state == 'sickbeard'">
     <a class="button" data-panel="#sb_shows" data-article="sickbeard" data-init="getShows">
       <span class="icon"><i class="icon-youtube-play"></i></span> <label>Shows</label>
     </a>
@@ -98,14 +98,14 @@ $(function() {
   </div>
 
   <!-- Tabbar: CouchPotato -->
-  <div class="tabbar" ng-show="state == 'couchpotato'">
+  <div class="tabbar" id="tabbar-couchpotato" ng-show="state == 'couchpotato'">
     <a class="button" data-panel="#cp_wanted" data-article="couchpotato">
       <span class="icon"></span> <label>Wanted</label>
     </a>
   </div>
 
   <!-- Tabbar: Settings -->
-  <div class="tabbar" ng-show="state == 'settings'">
+  <div class="tabbar" id="tabbar-settings" ng-show="state == 'settings'">
     <a class="button" data-panel="#settings_sabnzbd" data-article="settings">
       <span class="icon"><i class="icon-list-alt"></i></span> <label>Servers</label>
     </a>
@@ -122,6 +122,10 @@ $(function() {
     </nav>
     <article id='sabnzbd'>
       <section>
+        <div id="sabnzbd-error" class="hidden error">
+          <h1><i class="icon-frown"></i> Oeps...</h1>
+          <h2>{{error}}</h2>
+        </div>
         <div id="queue" class="tabbar-panel">
           <h2>Queue <small>({{queue.length}} items)</small></h2>
           <ul class='list' ng-show="queue.length > 0">

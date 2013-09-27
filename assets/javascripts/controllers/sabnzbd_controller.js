@@ -1,16 +1,15 @@
-var scope;
 (function() {
   'use strict';
 
   sofaControlApp.controller('SabnzbCtrl', ['$scope', '$rootScope', 'SABnzbdService', 'NZBIndexService', 'NZBClubService',
     function($scope, $rootScope, SABnzbdService, NZBIndexService, NZBClubService) {
+      $scope.error = null;
       $scope.queue = [];
       $scope.history = [];
       $scope.searchResult = {};
       $scope.stats = {};
       $scope.providerIndex = 0;
 
-scope = $scope;
       $scope.init = function() {
         $rootScope.state = 'sabnzbd';
         $rootScope.$apply();
@@ -20,8 +19,21 @@ scope = $scope;
         $scope.providers.push(NZBIndexService);
         $scope.providers.push(NZBClubService);
 
-        $('.tabbar:visible a.button:first').trigger('singletap');
-        updateQueueAndStats();
+        SABnzbdService.available().then(function(data) {
+          var $elms = $('#tabbar-sabnzbd, article#sabnzbd .tabbar-panel:first');
+          if(data.status === false) {
+            $elms.addClass('hidden');
+            $('#sabnzbd-error').removeClass('hidden');
+            $scope.error = data.error;
+          }
+          else {
+            $elms.removeClass('hidden');
+            $('#sabnzbd-error').addClass('hidden');
+            $scope.error = null;
+            updateQueueAndStats();
+          }
+          $('.tabbar:visible a.button:first').trigger('singletap');
+        });
       };
 
       $scope.showQueueOptions = function(task) {
@@ -190,7 +202,7 @@ scope = $scope;
         });
       };
 
-      setInterval(updateQueueAndStats, 2000);
+      //setInterval(updateQueueAndStats, 2000);
     }
   ]);
 }).call(this);

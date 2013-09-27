@@ -34,3 +34,11 @@ h2.no-margin-top {
 .u {
   text-decoration: underline;
 }
+.error h1 {
+  text-align: center;
+}
+.error h2 {
+  font-size: 24pt;
+  text-align: center;
+  overflow: initial;
+}

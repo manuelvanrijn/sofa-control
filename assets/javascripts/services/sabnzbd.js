@@ -10,6 +10,27 @@
 
     this.url = null;
 
+    this.available = function() {
+      // using the get_config call to check if app is online
+      var url = this.url + '&mode=get_config';
+      return $http.jsonp(url + '&callback=JSON_CALLBACK').then(function(resp) {
+        if(resp.data.status === undefined) {
+          return {
+            status: true,
+            error: ''
+          };
+        }
+        else {
+          return resp.data;
+        }
+      }, function() {
+        return {
+          status: false,
+          error: 'Error trying to connect'
+        };
+      });
+    };
+
     this.queue = function(start, limit) {
       start = start || 0;
       limit = limit || 10;
