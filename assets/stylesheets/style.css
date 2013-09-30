@@ -3,6 +3,9 @@ article > section {
   top: -15px;
   padding-top: 0;
 }
+article > section, .slide-out > section {
+  padding-bottom: 0;
+}
 body.hasTabBar article#settings {
   bottom: 0;
 }
