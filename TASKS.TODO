@@ -19,6 +19,8 @@ Sofa Control:
     ☐ Sickbeard set Season state (episode.setstatus without episode)
     ☐ Sickbeard set Episode state (episode.setstatus)
     ☐ Sickbeard history no click on items
+    ☐ CouchPotato full wanted list search
+    ☐ CouchPotato force search for specific wanted movie (possible?)
     ✔ On tab switch scroll to top @done (13-09-30 12:20)
 
   SERVICES IMPL:
