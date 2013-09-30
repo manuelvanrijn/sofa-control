@@ -215,10 +215,18 @@ $(function() {
         <div id="history" class="tabbar-panel">
           <h2>History</h2>
           <ul class='list' ng-show="history.length > 0">
-            <li class='comp' data-goto ng-repeat="item in history">
+            <li class='comp' data-goto ng-repeat="item in history" ng-click="toggleHistoryInfo($event)">
               <div>
                 <h3>{{item.name}}</h3>
                 <h4>Finished in: {{secondsToTime(item.download_time)}}</h4>
+                <ol class="sabnzbd_actions hidden">
+                  <li ng-repeat="stage in item.stage_log">
+                    <strong>{{stage.name}}:</strong>
+                    <ul>
+                      <li ng-repeat="action in stage.actions">{{action}}</li>
+                    </ul>
+                  </li>
+                </ol>
               </div>
               <aside>
                 <h4>{{item.status}}</h4>

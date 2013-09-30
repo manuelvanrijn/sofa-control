@@ -15,7 +15,7 @@ Sofa Control:
     ✔ CP search/add @done (13-09-27 17:41)
     ✔ Check if services are available @done (13-09-27 11:37)
     ☐ SABnzbd queue priority
-    ☐ SABnzbd history show logs
+    ✔ SABnzbd history show logs @done (13-09-30 15:01)
     ☐ Sickbeard set Season state (episode.setstatus without episode)
     ☐ Sickbeard set Episode state (episode.setstatus)
     ☐ Sickbeard history no click on items

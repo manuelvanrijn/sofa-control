@@ -1,4 +1,3 @@
-var result;
 (function() {
   'use strict';
 
@@ -46,7 +45,6 @@ var result;
         $rootScope.loading(true);
         $scope.downloadedMovies = [];
         CouchPotatoService.movies('done').then(function(movies) {
-          result = movies;
           $scope.downloadedMovies = movies;
         })['finally'](function() {
           $rootScope.loading(false);
@@ -71,7 +69,6 @@ var result;
         $rootScope.loading(true);
         $scope.searchResult = [];
         CouchPotatoService.search(query).then(function(data) {
-          result = data;
           $scope.searchResults = data;
           setTimeout(function() {
             $scope.$apply();

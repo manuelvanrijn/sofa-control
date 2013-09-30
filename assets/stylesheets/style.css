@@ -63,3 +63,14 @@ h2.no-margin-top {
 #couchpotato .list aside small {
   display: none;
 }
+
+.sabnzbd_actions {
+  padding-left: 3pt;
+  list-style-position: inside;
+  font-size: 10pt;
+  margin: 0;
+  color: #7f7f7f;
+}
+.sabnzbd_actions ul {
+  padding-left: 13pt;
+}

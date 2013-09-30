@@ -116,6 +116,7 @@
       $scope.getHistory = function() {
         $rootScope.loading(true);
         SABnzbdService.history().then(function(data) {
+          window.result = data.slots
           $scope.history = data.slots;
           if(!$scope.$$phase) {
             $scope.$apply();
@@ -123,6 +124,10 @@
         })['finally'](function() {
           $rootScope.loading(false);
         });
+      };
+
+      $scope.toggleHistoryInfo = function(event) {
+        $(event.currentTarget).find('.sabnzbd_actions').toggle();
       };
 
       $scope.secondsToTime = function(totalSeconds) {
