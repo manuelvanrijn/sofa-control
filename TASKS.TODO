@@ -23,7 +23,7 @@ Sofa Control:
     ☐ CouchPotato force search for specific wanted movie (possible?)
     ✔ On tab switch scroll to top @done (13-09-30 12:20)
     ✔ No keyboard after submit @done (13-09-30 16:03)
-    ☐ Sabnzbd history truncate detail stages
+    ✔ Sabnzbd history truncate detail stages @done (13-09-30 17:16)
 
   SERVICES IMPL:
     SABnzbd:

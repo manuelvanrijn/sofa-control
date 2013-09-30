@@ -159,6 +159,12 @@
       };
 
       $scope.showAddShowOptions = function(show) {
+        // hack for ios, trigger singletap to early when clicking the handle
+        // and having a list with clickable items
+        if($('#tabbar-sickbeard:visible').length === 0) {
+          return;
+        }
+
         $('.sheet').remove();
         window.$chocolatechip.UISheet({
           id: 'addShowSheet'

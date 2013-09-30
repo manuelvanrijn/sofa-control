@@ -72,5 +72,9 @@ h2.no-margin-top {
   color: #7f7f7f;
 }
 .sabnzbd_actions ul {
-  padding-left: 13pt;
+  padding-left: 11pt;
+  list-style: none;
+}
+.sabnzbd_actions ul li {
+  word-break: break-word;
 }

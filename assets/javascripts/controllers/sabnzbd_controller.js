@@ -45,6 +45,12 @@
       };
 
       $scope.showQueueOptions = function(task) {
+        // hack for ios, trigger singletap to early when clicking the handle
+        // and having a list with clickable items
+        if($('#tabbar-sabnzbd:visible').length === 0) {
+          return;
+        }
+
         $scope.currentTask = task;
         $('.sheet').remove();
         window.$chocolatechip.UISheet({
@@ -168,6 +174,12 @@
       };
 
       $scope.showAddNzbOptions = function(entry) {
+        // hack for ios, trigger singletap to early when clicking the handle
+        // and having a list with clickable items
+        if($('#tabbar-sabnzbd:visible').length === 0) {
+          return;
+        }
+
         $('.sheet').remove();
         window.$chocolatechip.UISheet({
           id: 'addNzbSheet'

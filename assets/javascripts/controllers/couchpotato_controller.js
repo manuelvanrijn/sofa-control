@@ -80,6 +80,12 @@
       };
 
       $scope.download = function(movie) {
+        // hack for ios, trigger singletap to early when clicking the handle
+        // and having a list with clickable items
+        if($('#tabbar-couchpotato:visible').length === 0) {
+          return;
+        }
+
         $('.sheet').remove();
         window.$chocolatechip.UISheet({
           id: 'profileSheet'
@@ -128,6 +134,12 @@
       };
 
       $scope.wantedOptions = function(movie) {
+        // hack for ios, trigger singletap to early when clicking the handle
+        // and having a list with clickable items
+        if($('#tabbar-couchpotato:visible').length === 0) {
+          return;
+        }
+
         $scope.currentWantedMovie = movie;
         $('.sheet').remove();
         window.$chocolatechip.UISheet({
