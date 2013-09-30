@@ -252,8 +252,8 @@ $(function() {
   <!-- Sick Beard Views -->
   <div ng-controller="SickBeardCtrl">
     <nav>
-      <a class="button backTo" ng-show="showState.show != null && showState.season == null" ng-click="setShow(null)">Back</a>
-      <a class="button backTo" ng-show="showState.show != null && showState.season != null" ng-click="setSeason(null, null)">Back</a>
+      <a class="button back" id="clearShow" ng-show="showState.show != null && showState.season == null">Back</a>
+      <a class="button back" id="clearSeason" ng-show="showState.show != null && showState.season != null">Back</a>
       <h1>Sick Beard</h1>
     </nav>
     <article id='sickbeard'>

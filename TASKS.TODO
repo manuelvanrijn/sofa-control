@@ -3,7 +3,7 @@ Sofa Control:
     ✔ When adding/removing a service the slide out navigation doesn't work anymore @done (13-09-26 18:46)
     ✔ When adding a server on IOS the first time and selecing it in the slideout results in a connection error...? @done (13-09-27 17:31)
         Seems this is a problem with the $broadcast that isn't fast enough
-    ☐ Back buttons don't work on IOS
+    ✔ Back buttons don't work on IOS @done (13-09-30 12:14)
     ☐ IOS doesn't show images in CP download view (probably also the Wanted view)
 
   Features:

@@ -30,6 +30,20 @@
       });
 
       $scope.init = function() {
+        // custom events because chui prevents nav click things...
+        $('#clearShow').off('singletap').on('singletap', function() {
+          $scope.setShow(null);
+          if(!$scope.$$phase) {
+            $scope.$apply();
+          }
+        });
+        $('#clearSeason').off('singletap').on('singletap', function() {
+          $scope.setSeason(null, null);
+          if(!$scope.$$phase) {
+            $scope.$apply();
+          }
+        });
+
         $rootScope.state = 'sickbeard';
         $rootScope.$apply();
       };
@@ -124,7 +138,6 @@
         if(show === null) {
           return;
         }
-
         $rootScope.loading(true);
         SickBeardService.seasons(show.tvdbid).then(function(data) {
           $scope.seasons = data;
