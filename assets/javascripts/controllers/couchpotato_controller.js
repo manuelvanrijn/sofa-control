@@ -1,8 +1,8 @@
 (function() {
   'use strict';
 
-  sofaControlApp.controller('CouchPotatoCtrl', ['$scope', '$rootScope', '$q', 'CouchPotatoService', 'OMDbService',
-    function($scope, $rootScope, $q, CouchPotatoService, OMDbService) {
+  sofaControlApp.controller('CouchPotatoCtrl', ['$scope', '$rootScope', '$q', '$filter', 'CouchPotatoService', 'OMDbService',
+    function($scope, $rootScope, $q, $filter, CouchPotatoService, OMDbService) {
       $scope.wantedMovies = [];
       $scope.downloadedMovies = [];
       $scope.searchResults = [];
@@ -158,6 +158,7 @@
         if(couchPotatoMovies.length === 0) {
           defer.resolve(movies);
         }
+        couchPotatoMovies = $filter('orderBy')(couchPotatoMovies, '-last_edit');
         for(var i=0; i<couchPotatoMovies.length;i++) {
           var couchPotatoMovie = couchPotatoMovies[i];
           OMDbService.byImdbId(couchPotatoMovie.library.info.imdb).then(function(movie) {
