@@ -5,6 +5,7 @@ Sofa Control:
         Seems this is a problem with the $broadcast that isn't fast enough
     ✔ Back buttons don't work on IOS @done (13-09-30 12:14)
     ☐ IOS doesn't show images in CP download view (probably also the Wanted view)
+    ☐ IOS downloading downloaded list for CouchPotato is very slow
 
   Features:
     ✔ SABnzbd queue delete, pause, resume @done (13-09-26 23:18)
@@ -18,7 +19,7 @@ Sofa Control:
     ☐ Sickbeard set Season state (episode.setstatus without episode)
     ☐ Sickbeard set Episode state (episode.setstatus)
     ☐ Sickbeard history no click on items
-    ☐ On tab switch scroll to top
+    ✔ On tab switch scroll to top @done (13-09-30 12:20)
 
   SERVICES IMPL:
     SABnzbd:

@@ -37,13 +37,14 @@ $(function() {
       $(this).addClass('selected');
 
       var id = $(this).attr('data-panel');
-      var article = $(this).attr('data-article');
+      var article = document.getElementById($(this).attr('data-article'));
       var init = $(this).attr('data-init');
 
       $(id).removeClass('hidden')
       if(typeof init === "string") {
-        angular.element(document.getElementById(article)).scope()[init]()
+        angular.element(article).scope()[init]()
       }
+      article.scrollTop = 0;
     });
 
     $('.mainnav').on('singletap', 'li', function(e) {
