@@ -1,8 +1,9 @@
+var result;
 (function() {
   'use strict';
 
-  sofaControlApp.controller('CouchPotatoCtrl', ['$scope', '$rootScope', '$q', '$filter', 'CouchPotatoService', 'OMDbService',
-    function($scope, $rootScope, $q, $filter, CouchPotatoService, OMDbService) {
+  sofaControlApp.controller('CouchPotatoCtrl', ['$scope', '$rootScope', '$q', '$filter', 'CouchPotatoService',
+    function($scope, $rootScope, $q, $filter, CouchPotatoService) {
       $scope.wantedMovies = [];
       $scope.downloadedMovies = [];
       $scope.searchResults = [];
@@ -34,39 +35,34 @@
       $scope.getWanted = function() {
         $rootScope.loading(true);
         $scope.wantedMovies = [];
-        CouchPotatoService.movies('active').then(function(data) {
-          getOMDbCollectionFromCouchPotatoMovies(data).then(function(movies) {
-            $scope.wantedMovies= movies;
-          })['finally'](function() {
-            $rootScope.loading(false);
-            setTimeout(function() {
-              $scope.$apply();
-            }, 1000);
-          });
+        CouchPotatoService.movies('active').then(function(movies) {
+          $scope.wantedMovies= movies;
+        })['finally'](function() {
+          $rootScope.loading(false);
         });
       };
 
       $scope.getDownloaded = function() {
         $rootScope.loading(true);
         $scope.downloadedMovies = [];
-        CouchPotatoService.movies('done').then(function(data) {
-          getOMDbCollectionFromCouchPotatoMovies(data).then(function(movies) {
-            $scope.downloadedMovies = movies;
-            $rootScope.loading(false);
-            setTimeout(function() {
-              $scope.$apply();
-            }, 1000);
-          });
+        CouchPotatoService.movies('done').then(function(movies) {
+          result = movies;
+          $scope.downloadedMovies = movies;
+        })['finally'](function() {
+          $rootScope.loading(false);
         });
       };
 
       $scope.getPoster = function(movie) {
-        if(movie.Poster && movie.Poster.substr(0, 4) === 'http') {
-          return movie.Poster;
+        var info = (movie.library) ? movie.library.info : movie;
+        var poster = info.images.poster[0];
+        var poster_original = info.images.poster_original[0];
+
+        if(poster && poster.substr(0, 4) === 'http') {
+          return poster;
         }
-        if(movie.images && movie.images.poster && movie.images.poster.length > 0 &&
-           movie.images.poster[0].substr(0, 4) === 'http') {
-          return movie.images.poster[0];
+        if(poster_original && poster_original.substr(0, 4) === 'http') {
+          return poster_original;
         }
         return '/assets/images/poster-unknown.png';
       };
@@ -75,7 +71,11 @@
         $rootScope.loading(true);
         $scope.searchResult = [];
         CouchPotatoService.search(query).then(function(data) {
+          result = data;
           $scope.searchResults = data;
+          setTimeout(function() {
+            $scope.$apply();
+          }, 1000);
         })['finally'](function() {
           $rootScope.loading(false);
         });
@@ -139,37 +139,17 @@
         window.$chocolatechip.UIPopup({
           id: 'warning',
           title: 'Confirm removal',
-          message: 'Are you sure you want to delete the movie "' + $scope.currentWantedMovie.Title + '"?',
+          message: 'Are you sure you want to delete the movie "' + $scope.currentWantedMovie.library.info.original_title + '"?',
           cancelButton: 'Cancel',
           continueButton: 'Delete',
           callback: function() {
             window.$chocolatechip.UIHideSheet();
             $("#wantedMovieSheet").remove();
-            CouchPotatoService.removeMovie($scope.currentWantedMovie.CouchPotatoId).then(function() {
+            CouchPotatoService.removeMovie($scope.currentWantedMovie.id).then(function() {
               $scope.getWanted();
             });
           }
         });
-      };
-
-      var getOMDbCollectionFromCouchPotatoMovies = function(couchPotatoMovies) {
-        var defer = $q.defer();
-        var movies = [];
-        if(couchPotatoMovies.length === 0) {
-          defer.resolve(movies);
-        }
-        couchPotatoMovies = $filter('orderBy')(couchPotatoMovies, '-last_edit');
-        for(var i=0; i<couchPotatoMovies.length;i++) {
-          var couchPotatoMovie = couchPotatoMovies[i];
-          OMDbService.byImdbId(couchPotatoMovie.library.info.imdb).then(function(movie) {
-            movie.CouchPotatoId = couchPotatoMovie.id;
-            movies.push(movie);
-            if(movies.length === couchPotatoMovies.length) {
-              defer.resolve(movies);
-            }
-          });
-        }
-        return defer.promise;
       };
     }
   ]);

@@ -448,15 +448,13 @@ $(function() {
         <div id="cp_wanted" class="tabbar-panel">
           <h2>Wanted <small>({{wantedMovies.length}} items)</small></h2>
           <ul class='list' ng-show="wantedMovies.length > 0">
-            <li class='comp' ng-repeat="movie in wantedMovies" data-goto ng-click="wantedOptions(movie)">
+            <li class='comp' ng-repeat="movie in wantedMovies | orderBy:'-last_edit'" data-goto ng-click="wantedOptions(movie)">
               <aside>
                 <img ng-src="{{getPoster(movie)}}" height="80px" err-src="/assets/images/poster-unknown.png" />
-                <br />
-                <small>{{movie.Released}}</small>
               </aside>
               <div>
-                <h3>{{movie.Title}} ({{movie.Year}})</h3>
-                <p>{{movie.Plot}}</p>
+                <h3>{{movie.library.info.original_title}} ({{movie.library.year}})</h3>
+                <p>{{movie.library.plot}}</p>
               </div>
               <aside>
                 <span class='nav'></span>
@@ -496,7 +494,7 @@ $(function() {
                   <img ng-src="{{getPoster(movie)}}" height="80px" err-src="/assets/images/poster-unknown.png" />
                 </aside>
                 <div>
-                  <h3>{{movie.titles[0]}} ({{movie.year}})</h3>
+                  <h3>{{movie.original_title}} ({{movie.year}})</h3>
                   <p>
                     {{movie.plot}}<br />
                     <strong>Released: </strong>{{movie.released}}
@@ -521,15 +519,13 @@ $(function() {
         <div id="cp_downloaded" class="tabbar-panel">
           <h2>Downloaded <small>({{downloadedMovies.length}} items)</small></h2>
           <ul class='list' ng-show="downloadedMovies.length > 0">
-            <li class='comp' ng-repeat="movie in downloadedMovies">
+            <li class='comp' ng-repeat="movie in downloadedMovies | orderBy:'-last_edit'">
               <aside>
                 <img ng-src="{{getPoster(movie)}}" height="80px" />
-                <br />
-                <small>{{movie.Released}}</small>
               </aside>
               <div>
-                <h3>{{movie.Title}} ({{movie.Year}})</h3>
-                <p>{{movie.Plot}}</p>
+                <h3>{{movie.library.info.original_title}} ({{movie.library.year}})</h3>
+                <p>{{movie.library.plot}}</p>
               </div>
             </li>
           </ul>
@@ -655,7 +651,6 @@ $(function() {
   <script src="/assets/javascripts/services/sabnzbd.js"></script>
   <script src="/assets/javascripts/services/sickbeard.js"></script>
   <script src="/assets/javascripts/services/couchpotato.js"></script>
-  <script src="/assets/javascripts/services/omdb.js"></script>
   <!-- SERVICES: NZB Providers -->
   <script src="/assets/javascripts/services/nzb-providers/nzbindex.js"></script>
   <script src="/assets/javascripts/services/nzb-providers/nzbclub.js"></script>
