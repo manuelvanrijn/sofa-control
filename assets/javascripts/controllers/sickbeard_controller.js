@@ -142,7 +142,15 @@
         }
         $rootScope.loading(true);
         SickBeardService.seasons(show.tvdbid).then(function(data) {
-          $scope.seasons = data;
+          var result = [];
+          angular.forEach(data, function(episodes, season) {
+            var episodeArray = [];
+            angular.forEach(episodes, function(episode, episodeNumber) {
+              this.push(episode);
+            }, episodeArray);
+            this.push(episodeArray);
+          }, result);
+          $scope.seasons = result;
         })['finally'](function() {
           $rootScope.loading(false);
         });
@@ -159,6 +167,35 @@
       };
 
       $scope.showAddShowOptions = function(show) {
+        showStatusSheet(function(status) {
+          $scope.addShow(show, status);
+        });
+      };
+
+      $scope.showEditEpisode = function(episode) {
+        showStatusSheet(function(status) {
+          $rootScope.loading(true);
+
+          var tvdbid = $scope.showState.show.tvdbid;
+          var season = $scope.showState.seasonNumber;
+          SickBeardService.setStatus(tvdbid, season, status, episode).then(function(data) {
+            $rootScope.loading(false);
+
+            var idx = $scope.seasons.indexOf($scope.showState.season);
+            $scope.setShow($scope.showState.show);
+            setTimeout(function() {
+              var season = $scope.seasons[idx];
+              $scope.setSeason($scope.showState.seasonNumber, season);
+              $scope.$apply();
+            }, 300);
+
+            window.$chocolatechip.UIHideSheet();
+            $('#tabbar-sickbeard').show();
+          });
+        });
+      };
+
+      var showStatusSheet = function(callback) {
         // hack for ios, trigger singletap to early when clicking the handle
         // and having a list with clickable items
         if($('#tabbar-sickbeard:visible').length === 0) {
@@ -176,7 +213,7 @@
 
         $('#addShowSheet section a').on('singletap', function(e) {
           e.preventDefault();
-          $scope.addShow(show, $(this).data('status'));
+          callback($(this).data('status'));
         });
 
         window.$chocolatechip.UIShowSheet();

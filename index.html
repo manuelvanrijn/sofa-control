@@ -364,12 +364,13 @@ $(function() {
               </li>
             </ul>
           </div>
+          <!-- Episodes -->
           <div ng-show="showState.show != null && showState.season != null">
             <img ng-src="{{getBanner(showState.show)}}" height="80px" err-src="/assets/images/poster-unknown.png" class="banner" />
 
             <h2>Episodes <small>Season {{showState.seasonNumber}}</small></h2>
             <ul class='list' role='list'>
-              <li class='comp' data-goto ng-repeat="episode in showState.season">
+              <li class='comp' data-goto ng-repeat="episode in showState.season" ng-click="showEditEpisode(($index + 1))">
                 <div>
                   <h3>{{$index + 1}}: {{episode.name}}</h3>
                   <h4>{{episode.airdate}} - {{episode.quality}}</h4>

@@ -136,5 +136,23 @@
         return resp.data.data;
       });
     };
+
+    this.setStatus = function(tvdbid, season, status, episode) {
+      status = status.toLowerCase();
+      episode = episode || null;
+
+      if(status === 'wanted' || status === 'skipped' || status === 'archived' || status === 'ignored') {
+        var url = this.url + 'episode.setstatus&tvdbid=' + tvdbid + '&season=' + season + '&status=' + status + '&force=1';
+        if(episode !== null) {
+          url += '&episode=' + episode;
+        }
+        return $http.jsonp(url + '&callback=JSON_CALLBACK').then(function(resp) {
+          return resp.data;
+        });
+      }
+      else {
+        return; //todo: some error handling
+      }
+    };
   }]);
 }).call(this);
