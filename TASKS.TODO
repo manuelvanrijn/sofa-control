@@ -14,41 +14,47 @@ Sofa Control:
     ✔ CP search/add @done (13-09-27 17:41)
     ✔ Check if services are available @done (13-09-27 11:37)
     ☐ SABnzbd queue priority
+    ☐ SABnzbd history show logs
+    ☐ Sickbeard set Season state (episode.setstatus without episode)
+    ☐ Sickbeard set Episode state (episode.setstatus)
+    ☐ Sickbeard history no click on items
+    ☐ On tab switch scroll to top
 
-  SABnzbd:
-    API DOC: http://wiki.sabnzbd.org/api
-    API Calls:
-      ✔ Get queue @done (13-09-19 14:43)
-      ✔ Get history (start = index, limit = count) @done (13-09-19 14:43)
-      ✔ Add nzb from url @done (13-09-19 14:55)
-      ✔ Delete slot @done (13-09-19 15:04)
-      ✔ Pause downloads @done (13-09-19 15:04)
-      ✔ Resume downloads @done (13-09-19 15:04)
-      ✔ Pause a download @done (13-09-19 15:09)
-      ✔ Resume a download @done (13-09-19 15:09)
+  SERVICES IMPL:
+    SABnzbd:
+      API DOC: http://wiki.sabnzbd.org/api
+      API Calls:
+        ✔ Get queue @done (13-09-19 14:43)
+        ✔ Get history (start = index, limit = count) @done (13-09-19 14:43)
+        ✔ Add nzb from url @done (13-09-19 14:55)
+        ✔ Delete slot @done (13-09-19 15:04)
+        ✔ Pause downloads @done (13-09-19 15:04)
+        ✔ Resume downloads @done (13-09-19 15:04)
+        ✔ Pause a download @done (13-09-19 15:09)
+        ✔ Resume a download @done (13-09-19 15:09)
 
-  Sick Beard:
-    API DOC: http://sickbeard.com/api/
-    API Calls:
-      ✔ stats @done (13-09-19 16:51)
-      ✔ forceSearch @done (13-09-19 16:51)
-      ✔ history @done (13-09-19 16:51)
-      ✔ future @done (13-09-19 16:51)
-      ✔ shows @done (13-09-19 16:51)
-      ✔ show @done (13-09-19 16:51)
-      ✔ pauseResumeShow @done (13-09-19 16:51)
-      ✔ searchShows @done (13-09-19 16:51)
-      ✔ addShow @done (13-09-19 16:51)
-      ✔ deleteShow @done (13-09-19 16:51)
-      ✔ seasons @done (13-09-19 16:51)
+    Sick Beard:
+      API DOC: http://sickbeard.com/api/
+      API Calls:
+        ✔ stats @done (13-09-19 16:51)
+        ✔ forceSearch @done (13-09-19 16:51)
+        ✔ history @done (13-09-19 16:51)
+        ✔ future @done (13-09-19 16:51)
+        ✔ shows @done (13-09-19 16:51)
+        ✔ show @done (13-09-19 16:51)
+        ✔ pauseResumeShow @done (13-09-19 16:51)
+        ✔ searchShows @done (13-09-19 16:51)
+        ✔ addShow @done (13-09-19 16:51)
+        ✔ deleteShow @done (13-09-19 16:51)
+        ✔ seasons @done (13-09-19 16:51)
 
-  CouchPotato:
-    API DOC: http://host:port/docs
-    API Calls:
-     ✔ available @done (13-09-19 17:27)
-     ✔ version @done (13-09-19 17:27)
-     ✔ searchWantedList @done (13-09-19 17:27)
-     ✔ search @done (13-09-19 17:27)
-     ✔ movies @done (13-09-19 17:27)
-     ✔ addMovie @done (13-09-19 17:27)
-     ✔ profiles @done (13-09-19 17:27)
+    CouchPotato:
+      API DOC: http://host:port/docs
+      API Calls:
+       ✔ available @done (13-09-19 17:27)
+       ✔ version @done (13-09-19 17:27)
+       ✔ searchWantedList @done (13-09-19 17:27)
+       ✔ search @done (13-09-19 17:27)
+       ✔ movies @done (13-09-19 17:27)
+       ✔ addMovie @done (13-09-19 17:27)
+       ✔ profiles @done (13-09-19 17:27)
