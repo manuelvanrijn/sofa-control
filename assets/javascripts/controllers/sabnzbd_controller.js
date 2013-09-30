@@ -139,7 +139,7 @@
 
       $scope.search = function(query, providerIndex) {
         $rootScope.loading(true);
-
+        $('input#sabquery').blur();
         var provider = $scope.providers[providerIndex];
         provider.search(query).then(function(response) {
           $scope.searchResult = response.data.responseData.feed;

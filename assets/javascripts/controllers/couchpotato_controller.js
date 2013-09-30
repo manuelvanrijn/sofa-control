@@ -68,6 +68,7 @@
       $scope.search = function(query) {
         $rootScope.loading(true);
         $scope.searchResult = [];
+        $('input#cpquery').blur();
         CouchPotatoService.search(query).then(function(data) {
           $scope.searchResults = data;
           setTimeout(function() {
