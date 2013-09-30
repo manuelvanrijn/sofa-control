@@ -80,10 +80,14 @@
       };
 
       $scope.download = function(movie) {
+        $('.sheet').remove();
         window.$chocolatechip.UISheet({
           id: 'profileSheet'
         });
         $('#profileSheet section').html($('#profileOptions').html());
+        $('#profileSheet .handle').on('singletap', function() {
+          $('#tabbar-couchpotato').show();
+        });
 
         $('#profileSheet section li').on('singletap', function(e) {
           e.preventDefault();
@@ -93,7 +97,6 @@
 
           $rootScope.loading(true);
           window.$chocolatechip.UIHideSheet();
-          $('#profileSheet').remove();
           $('#tabbar-couchpotato').show();
 
           CouchPotatoService.addMovie(profileId, identifier, title).then(function(data) {
@@ -126,11 +129,16 @@
 
       $scope.wantedOptions = function(movie) {
         $scope.currentWantedMovie = movie;
+        $('.sheet').remove();
         window.$chocolatechip.UISheet({
           id: 'wantedMovieSheet'
         });
+        $('#wantedMovieSheet .handle').on('singletap', function() {
+          $('#tabbar-couchpotato').show();
+        });
         $('#wantedMovieSheet section').html($('#wantedMovieOptions').children().clone(true, true));
         window.$chocolatechip.UIShowSheet();
+        $('#tabbar-couchpotato').hide();
       };
 
       $scope.deleteWantedMovie = function() {
@@ -142,7 +150,7 @@
           continueButton: 'Delete',
           callback: function() {
             window.$chocolatechip.UIHideSheet();
-            $("#wantedMovieSheet").remove();
+            $('#tabbar-couchpotato').show();
             CouchPotatoService.removeMovie($scope.currentWantedMovie.id).then(function() {
               $scope.getWanted();
             });

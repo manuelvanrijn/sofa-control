@@ -167,6 +167,7 @@ $(function() {
         </div>
 
         <div id="queueOptions" class="hidden">
+          <h2>{{currentTask.filename}}</h2>
           <ul class='list'>
             <li ng-hide="currentTask.status == 'Paused'" ng-click="pauseTask()">
               <a class='button' data-status="pause">Pause</a>
@@ -200,7 +201,7 @@ $(function() {
           </form>
 
           <ul class='list' ng-show="searchResult.entries.length > 0">
-            <li class='comp' data-goto ng-repeat="entry in searchResult.entries" ng-click="download(entry)">
+            <li class='comp' data-goto ng-repeat="entry in searchResult.entries" ng-click="showAddNzbOptions(entry)">
               <div>
                 <h3>{{entry.title}}</h3>
                 <h4>{{entry.contentSnippet}}</h4>
@@ -208,6 +209,27 @@ $(function() {
               <aside>
                 <span class='nav'></span>
               </aside>
+            </li>
+          </ul>
+        </div>
+
+        <div id="addNzbOptions" class="hidden">
+          <h2>Add NZB - Priority:</h2>
+          <ul class='list'>
+            <li>
+              <a class='button' data-priority="-100">Default</a>
+            </li>
+            <li>
+              <a class='button' data-priority="-2">Paused</a>
+            </li>
+            <li>
+              <a class='button' data-priority="-1">Low priority</a>
+            </li>
+            <li>
+              <a class='button' data-priority="0">Normal priority</a>
+            </li>
+            <li>
+              <a class='button' data-priority="1">High priority</a>
             </li>
           </ul>
         </div>
@@ -395,6 +417,7 @@ $(function() {
           </div>
 
           <div id="addShowOptions" class="hidden">
+            <h2>Add show with status:</h2>
             <ul class='list'>
               <li>
                 <a class='button' data-status="wanted">Wanted</a>
@@ -416,7 +439,7 @@ $(function() {
           <h2>History</h2>
 
           <ul class='list' ng-show="history.length > 0">
-            <li class='comp' data-goto ng-repeat="item in history">
+            <li class='comp' ng-repeat="item in history">
               <aside>
                 <img ng-src="{{getPoster(item)}}" height="80px" err-src="/assets/images/poster-unknown.png" />
               </aside>
@@ -426,7 +449,6 @@ $(function() {
               </div>
               <aside>
                 <h4>{{item.status}}</h4>
-                <span class='nav'></span>
               </aside>
             </li>
           </ul>
@@ -487,6 +509,7 @@ $(function() {
           </ul>
 
           <div id="wantedMovieOptions" class="hidden">
+            <h2>Movie options</h2>
             <ul class='list'>
               <li>
                 <a class='button' ng-click="deleteWantedMovie()">Delete</a>
@@ -532,6 +555,7 @@ $(function() {
           </div>
 
           <div id="profileOptions" class="hidden">
+            <h2>Add movie with profile:</h2>
             <ul class='list'>
               <li ng-repeat="profile in profiles" data-id="{{profile.id}}">
                 <a class='button'>{{profile.label}}</a>

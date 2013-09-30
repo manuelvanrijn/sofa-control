@@ -113,8 +113,7 @@
 
       $scope.addShow = function(show, status) {
         $rootScope.loading(true);
-        window.$chocolatechip.UIHideSheet();
-        $('#addShowSheet').remove();
+
         SickBeardService.addShow(show.tvdbid, status).then(function(data) {
           $rootScope.loading(false);
 
@@ -125,6 +124,8 @@
             cancelButton: false,
             continueButton: 'OK',
             callback: function() {
+              window.$chocolatechip.UIHideSheet();
+              $('#tabbar-sickbeard').show();
               $scope.searchResult = {};
               $scope.query = '';
               $scope.$apply();
@@ -158,8 +159,12 @@
       };
 
       $scope.showAddShowOptions = function(show) {
+        $('.sheet').remove();
         window.$chocolatechip.UISheet({
           id: 'addShowSheet'
+        });
+        $('#addShowSheet .handle').on('singletap', function() {
+          $('#tabbar-sickbeard').show();
         });
         $('#addShowSheet section').html($('#addShowOptions').html());
 
@@ -169,6 +174,7 @@
         });
 
         window.$chocolatechip.UIShowSheet();
+        $('#tabbar-sickbeard').hide();
       };
 
       $scope.getStats = function() {

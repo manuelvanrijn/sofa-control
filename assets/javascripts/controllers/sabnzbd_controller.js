@@ -11,6 +11,7 @@
       $scope.stats = {};
       $scope.providerIndex = 0;
 
+
       var $elms = $('#tabbar-sabnzbd, article#sabnzbd .tabbar-panel:first');
       $rootScope.$on('SABnzbdService.connectionError', function(e, result) {
         $elms.addClass('hidden');
@@ -45,25 +46,30 @@
 
       $scope.showQueueOptions = function(task) {
         $scope.currentTask = task;
+        $('.sheet').remove();
         window.$chocolatechip.UISheet({
           id: 'queueSheet'
+        });
+        $('#queueSheet .handle').on('singletap', function() {
+          $('#tabbar-sabnzbd').show();
         });
 
         setTimeout(function() {
           $('#queueSheet section').html($('#queueOptions').children().clone(true, true));
-          $('#queueSheet section a').on('singletap', function(e) {
+          /*$('#queueSheet section a').on('singletap', function(e) {
             e.preventDefault();
             //$scope.addShow(show, $(this).data('status'));
-          });
+          });*/
         }, 300);
 
         window.$chocolatechip.UIShowSheet();
+        $('#tabbar-sabnzbd').hide();
       };
 
       $scope.resumeTask = function() {
         SABnzbdService.resumeTask($scope.currentTask.nzo_id).then(function(data) {
           window.$chocolatechip.UIHideSheet();
-          $('#queueSheet').remove();
+          $('#tabbar-sabnzbd').show();
         });
 
       };
@@ -71,7 +77,7 @@
       $scope.pauseTask = function() {
         SABnzbdService.pauseTask($scope.currentTask.nzo_id).then(function(data) {
           window.$chocolatechip.UIHideSheet();
-          $('#queueSheet').remove();
+          $('#tabbar-sabnzbd').show();
         });
       };
 
@@ -84,7 +90,7 @@
           continueButton: 'Delete',
           callback: function() {
             window.$chocolatechip.UIHideSheet();
-            $('#queueSheet').remove();
+            $('#tabbar-sabnzbd').show();
             SABnzbdService.deleteTask($scope.currentTask.nzo_id);
           }
         });
@@ -161,32 +167,51 @@
         });
       };
 
-      $scope.download = function(entry) {
-        window.$chocolatechip.UIPopup({
-          id: 'warning',
-          title: 'Confirm download',
-          message: 'Do you want to download: <br />' + entry.title + '?',
-          cancelButton: 'Cancel',
-          continueButton: 'Download',
-          callback: function() {
-            var provider = $scope.providers[$scope.providerIndex];
-            var url = provider.getDownloadUrl(entry);
-            SABnzbdService.addTaskByUrl(url).then(function(data) {
-              var title = 'Success';
-              var message = 'Download added to the queue';
-              if(data.status !== true) {
-                title = 'Failed';
-                message = 'Download could not be added to the queue';
-              }
-              window.$chocolatechip.UIPopup({
-                id: 'addDownload',
-                title: title,
-                message: message,
-                cancelButton: false,
-                continueButton: 'OK'
-              });
-            });
+      $scope.showAddNzbOptions = function(entry) {
+        $('.sheet').remove();
+        window.$chocolatechip.UISheet({
+          id: 'addNzbSheet'
+        });
+        $('#addNzbSheet .handle').on('singletap', function() {
+          $('#tabbar-sabnzbd').show();
+        });
+        $('#addNzbSheet section').html($('#addNzbOptions').html());
+
+        $('#addNzbSheet section a').on('singletap', function(e) {
+          e.preventDefault();
+          $scope.download(entry, $(this).data('priority'));
+        });
+
+        window.$chocolatechip.UIShowSheet();
+        $('#tabbar-sabnzbd').hide();
+      };
+
+      $scope.download = function(entry, priority) {
+        $rootScope.loading(true);
+
+        var provider = $scope.providers[$scope.providerIndex];
+        var url = provider.getDownloadUrl(entry);
+
+        SABnzbdService.addTaskByUrl(url, priority).then(function(data) {
+          var title = 'Success';
+          var message = 'Download added to the queue';
+          if(data.status !== true) {
+            title = 'Failed';
+            message = 'Download could not be added to the queue';
           }
+
+          $rootScope.loading(false);
+          window.$chocolatechip.UIPopup({
+            id: 'addDownload',
+            title: title,
+            message: message,
+            cancelButton: false,
+            continueButton: 'OK',
+            callback: function() {
+              window.$chocolatechip.UIHideSheet();
+              $('#tabbar-sabnzbd').show();
+            }
+          });
         });
       };
 

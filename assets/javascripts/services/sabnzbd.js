@@ -60,8 +60,8 @@
       });
     };
 
-    this.addTaskByUrl = function(nzbUrl) {
-      var url = this.url + '&mode=addurl&name=' + nzbUrl;
+    this.addTaskByUrl = function(nzbUrl, priority) {
+      var url = this.url + '&mode=addurl&name=' + nzbUrl + '&priority=' + priority;
       return $http.jsonp(url + '&callback=JSON_CALLBACK').then(function(resp) {
         return resp.data;
       });
