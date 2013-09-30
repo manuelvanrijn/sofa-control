@@ -3,6 +3,7 @@
 
   sofaControlApp.controller('SabnzbCtrl', ['$scope', '$rootScope', 'SABnzbdService', 'NZBIndexService', 'NZBClubService',
     function($scope, $rootScope, SABnzbdService, NZBIndexService, NZBClubService) {
+      var _updateQueueAndStatsPointer = null;
       $scope.error = null;
       $scope.queue = [];
       $scope.history = [];
@@ -21,8 +22,15 @@
         $elms.removeClass('hidden');
         $('#sabnzbd-error').addClass('hidden');
         $scope.error = null;
+        _updateQueueAndStatsPointer = setInterval(updateQueueAndStats, 2000);
         updateQueueAndStats();
         $('#tabbar-sabnzbd a.button:first').trigger('singletap');
+      });
+
+      $scope.$watch('state', function(value) {
+        if(value !== 'sabnzbd') {
+          clearInterval(_updateQueueAndStatsPointer);
+        }
       });
 
       $scope.init = function() {
@@ -203,8 +211,6 @@
           }
         });
       };
-
-      //setInterval(updateQueueAndStats, 2000);
     }
   ]);
 }).call(this);
