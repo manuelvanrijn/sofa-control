@@ -21,6 +21,7 @@ Sofa Control:
     ✔ On tab switch scroll to top @done (13-09-30 12:20)
     ✔ No keyboard after submit @done (13-09-30 16:03)
     ✔ Sabnzbd history truncate detail stages @done (13-09-30 17:16)
+    ✔ Sabnzbd stats list to small @done (13-10-01 17:06)
     ☐ CouchPotato perform search on wanted list
     ☐ CouchPotato force search for specific wanted movie (possible?)
     ☐ Sickbeard set Season state (episode.setstatus without episode)

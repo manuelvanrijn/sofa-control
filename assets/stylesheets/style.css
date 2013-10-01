@@ -38,6 +38,10 @@ a.button.back, a.button.backTo {
 nav > h1 {
   z-index: 0;
 }
+#sabnzbd .list > li.switched > h4 {
+  width: 60%;
+  max-width: 60%;
+}
 h2.no-margin-top {
   margin-top: 0;
 }
