@@ -28,7 +28,7 @@ var UISlideout;
   }]);
 
   // Modified version of the chocolatechip-ui slideout
-  UISlideout = function ( position ) {
+  window.$chocolatechip.UISlideout = function ( position ) {
     $('article').removeClass('next');
     $('article').removeClass('current');
     $('article').prev().removeClass('next');
@@ -56,5 +56,7 @@ var UISlideout;
       $(whichArticle).prev().addClass('show');
     });
   };
+
+  window.$chocolatechip.UIGoBack = function () {};
 
 }).call(this);
