@@ -16,14 +16,17 @@ Sofa Control:
     ✔ Check if services are available @done (13-09-27 11:37)
     ✔ SABnzbd queue priority @done (13-09-30 16:59)
     ✔ SABnzbd history show logs @done (13-09-30 15:01)
-    ☐ Sickbeard set Season state (episode.setstatus without episode)
     ✔ Sickbeard set Episode state (episode.setstatus) @done (13-09-30 23:16)
     ✔ Sickbeard history no click on items @done (13-09-30 16:59)
-    ☐ CouchPotato full wanted list search
-    ☐ CouchPotato force search for specific wanted movie (possible?)
     ✔ On tab switch scroll to top @done (13-09-30 12:20)
     ✔ No keyboard after submit @done (13-09-30 16:03)
     ✔ Sabnzbd history truncate detail stages @done (13-09-30 17:16)
+    ☐ CouchPotato perform search on wanted list
+    ☐ CouchPotato force search for specific wanted movie (possible?)
+    ☐ Sickbeard set Season state (episode.setstatus without episode)
+    ☐ Sickbeard delete show
+    ☐ Sickbeard pause/resume show
+    ☐ Sickbeard force backlog search
 
   SERVICES IMPL:
     SABnzbd:
