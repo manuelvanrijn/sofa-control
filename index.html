@@ -98,6 +98,13 @@ $(function() {
     </a>
   </div>
 
+  <!-- Tabbar: SABnzbd -->
+  <div class="tabbar" id="tabbar-nzbget" ng-show="state == 'nzbget'">
+    <a class="button" data-panel="#nzbget_queue" data-article="nzbget">
+      <span class="icon"><i class="icon-tasks"></i></span> <label>Queue</label>
+    </a>
+  </div>
+
   <!-- Tabbar: Sick Beard -->
   <div class="tabbar" id="tabbar-sickbeard" ng-show="state == 'sickbeard'">
     <a class="button" data-panel="#sb_shows" data-article="sickbeard" data-init="getShows">
@@ -289,6 +296,37 @@ $(function() {
             <li class='switched'>
               <h3>Version</h3>
               <h4>{{stats.version}}</h4>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </article>
+  </div>
+
+  <!-- NZBGet Views -->
+  <div ng-controller="NzbgetCtrl">
+    <nav>
+      <h1>NZBGet</h1>
+    </nav>
+    <article id='nzbget'>
+      <section>
+        <div id="nzbget-error" class="hidden error">
+          <h1><i class="icon-frown"></i> Oeps...</h1>
+          <h2>{{error}}</h2>
+        </div>
+        <div id="nzbget_queue" class="tabbar-panel">
+          <h2>Queue <small>({{queue.length}} items)</small></h2>
+          <ul class='list' ng-show="queue.length > 0">
+            <li class='comp' ng-repeat="item in queue" data-goto>
+              <div>
+                <h3>{{item.NZBName}}</h3>
+                <h4>{{item.RemainingSizeMB}} / {{item.FileSizeMB}} MB</h4>
+              </div>
+              <aside>
+                <!--<h4 ng-hide="item.status == 'Paused'">{{item.timeleft}}</h4>
+                <h4 ng-show="item.status == 'Paused'">{{item.status}}</h4>-->
+                <span class='nav'></span>
+              </aside>
             </li>
           </ul>
         </div>
@@ -617,12 +655,28 @@ $(function() {
                 <input type="text" ng-model="editServer.port" name="port" autocapitalize="off" autocorrect="off" required />
               </aside>
             </li>
-            <li class='comp'>
+            <li class='comp' ng-hide="editServer.serverType == SERVERTYPE.NZBGET">
               <div>
                 <label for='api'>API-KEY:</label>
               </div>
               <aside>
                 <input type="text" ng-model="editServer.apiKey" name="api" autocapitalize="off" autocorrect="off" required />
+              </aside>
+            </li>
+            <li class='comp' ng-show="editServer.serverType == SERVERTYPE.NZBGET">
+              <div>
+                <label for='username'>Username:</label>
+              </div>
+              <aside>
+                <input type="text" ng-model="editServer.username" name="username" autocapitalize="off" autocorrect="off" required />
+              </aside>
+            </li>
+            <li class='comp' ng-show="editServer.serverType == SERVERTYPE.NZBGET">
+              <div>
+                <label for='password'>Password:</label>
+              </div>
+              <aside>
+                <input type="password" ng-model="editServer.password" name="password" autocapitalize="off" autocorrect="off" required />
               </aside>
             </li>
           </ul>
@@ -641,6 +695,17 @@ $(function() {
           </ul>
           <div>
             <a class="button" ng-click="new(SERVERTYPE.SABNZBD)"><i class="icon-plus"></i> Add a new SABnzbd server</a>
+          </div>
+
+          <h2 class="no-margin-top"><img src="/assets/images/nzbget.png" /> NZBGet servers</h2>
+          <ul class='list' data-goto id="nzbgetSettingsList">
+            <li class='nav' data-goto ng-repeat="server in nzbgetConfigs" ng-click="edit(server, SERVERTYPE.NZBGET)">
+              <h3>{{server.name}}</h3>
+              <h4>Host: <span class="u">{{server.host}}</span> on port: <span class="u">{{server.port}}</span></h4>
+            </li>
+          </ul>
+          <div>
+            <a class="button" ng-click="new(SERVERTYPE.NZBGET)"><i class="icon-plus"></i> Add a new NZBGet server</a>
           </div>
 
           <h2 class="no-margin-top"><img src="/assets/images/sickbeard.png" /> Sick Beard servers</h2>
@@ -678,6 +743,9 @@ $(function() {
           <li data-show-article="sabnzbd" ng-repeat="config in sabnzbdConfigs" ng-click="switchToSABnzbdConfig(config)">
             <h3><img src="/assets/images/sabnzbd.png" /> {{config.name}}</h3>
           </li>
+          <li data-show-article="nzbget" ng-repeat="config in nzbgetConfigs" ng-click="switchToNZBGetConfig(config)">
+            <h3><img src="/assets/images/nzbget.png" /> {{config.name}}</h3>
+          </li>
           <li data-show-article="sickbeard" ng-repeat="config in sickBeardConfigs" ng-click="switchToSickBeardConfig(config)">
             <h3><img src="/assets/images/sickbeard.png" /> {{config.name}}</h3>
           </li>
@@ -698,6 +766,7 @@ $(function() {
   <script src="/assets/javascripts/directives/err-src.js"></script>
   <!-- SERVICES -->
   <script src="/assets/javascripts/services/sabnzbd.js"></script>
+  <script src="/assets/javascripts/services/nzbget.js"></script>
   <script src="/assets/javascripts/services/sickbeard.js"></script>
   <script src="/assets/javascripts/services/couchpotato.js"></script>
   <!-- SERVICES: NZB Providers -->
@@ -706,6 +775,7 @@ $(function() {
   <!-- CONTROLLERS -->
   <script src="/assets/javascripts/controllers/config_controller.js"></script>
   <script src="/assets/javascripts/controllers/sabnzbd_controller.js"></script>
+  <script src="/assets/javascripts/controllers/nzbget_controller.js"></script>
   <script src="/assets/javascripts/controllers/sickbeard_controller.js"></script>
   <script src="/assets/javascripts/controllers/couchpotato_controller.js"></script>
 </body>

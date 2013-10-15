@@ -6,12 +6,14 @@
       $scope.showForm = false;
       $scope.SERVERTYPE = {
         SABNZBD: {name: 'SABnzbd'},
+        NZBGET: {name: 'NZBGet'},
         SICKBEARD: {name: 'Sick Beard'},
         COUCHPOTATO: {name: 'CouchPotato'}
       };
 
       $rootScope.$on('updateConfigs', function(e) {
         $scope.sabnzbdConfigs     = localStorageService.get('sabnzbdConfigs');
+        $scope.nzbgetConfigs      = localStorageService.get('nzbgetConfigs');
         $scope.sickBeardConfigs   = localStorageService.get('sickBeardConfigs');
         $scope.couchPotatoConfigs = localStorageService.get('couchPotatoConfigs');
       });
@@ -54,6 +56,13 @@
           }
           $scope.addSABnzbdConfig($scope.editServer);
           break;
+        case $scope.SERVERTYPE.NZBGET:
+          if(isUpdate) {
+            $scope.removeNZBGetConfig($scope.editServer.originalConfig);
+            delete $scope.editServer.originalConfig;
+          }
+          $scope.addNZBGetConfig($scope.editServer);
+          break;
         case $scope.SERVERTYPE.SICKBEARD:
           if(isUpdate) {
             $scope.removeSickBeardConfig($scope.editServer.originalConfig);
@@ -88,6 +97,9 @@
             case $scope.SERVERTYPE.SABNZBD:
               $scope.removeSABnzbdConfig($scope.editServer);
               break;
+            case $scope.SERVERTYPE.NZBGET:
+              $scope.removeNZBGetConfig($scope.editServer);
+              break;
             case $scope.SERVERTYPE.SICKBEARD:
               $scope.removeSickBeardConfig($scope.editServer);
               break;
@@ -104,6 +116,10 @@
         $rootScope.$broadcast('setSABnzbdConfig', config);
       };
 
+      $scope.switchToNZBGetConfig = function(config) {
+        $rootScope.$broadcast('setNZBGetConfig', config);
+      };
+
       $scope.switchToSickBeardConfig = function(config) {
         $rootScope.$broadcast('setSickBeardConfig', config);
       };
@@ -116,6 +132,10 @@
         addNewServiceConfig('sabnzbdConfigs', config);
       };
 
+      $scope.addNZBGetConfig = function(config) {
+        addNewServiceConfig('nzbgetConfigs', config);
+      };
+
       $scope.addSickBeardConfig = function(config) {
         addNewServiceConfig('sickBeardConfigs', config);
       };
@@ -126,6 +146,10 @@
 
       $scope.removeSABnzbdConfig = function(config) {
         removeServiceConfig('sabnzbdConfigs', config);
+      };
+
+      $scope.removeNZBGetConfig = function(config) {
+        removeServiceConfig('nzbgetConfigs', config);
       };
 
       $scope.removeSickBeardConfig = function(config) {

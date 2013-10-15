@@ -9,6 +9,7 @@ var UISlideout;
   sofaControlApp.run(['$rootScope', function($rootScope) {
     $rootScope.state = null;
     $rootScope.sabnzbdConfigs = [];
+    $rootScope.nzbgetConfigs = [];
     $rootScope.sickBeardConfigs = [];
     $rootScope.couchPotatoConfigs = [];
 
